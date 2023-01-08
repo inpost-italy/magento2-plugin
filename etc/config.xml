@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <inpost>
+                <active>1</active>
+                <model>InPost\Shipment\Carrier\Inpost</model>
+                <name>InPost</name>
+                <title>InPost</title>
+                <description>InPost shipping methods</description>
+                <sort_order>0</sort_order>
+            </inpost>
+        </carriers>
+    </default>
+</config>
