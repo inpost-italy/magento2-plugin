@@ -10,19 +10,18 @@ class ShippingInformationManagementPlugin
     /**
      * Set Inpost Attribute Values
      *
-     * @param  ShippingInformationManagement $subject
+     * @param ShippingInformationManagement $subject
      * @param                                $cartId
-     * @param  ShippingInformationInterface  $addressInformation
+     * @param ShippingInformationInterface $addressInformation
      */
     public function beforeSaveAddressInformation(
         ShippingInformationManagement $subject,
-                                      $cartId,
+        $cartId,
         ShippingInformationInterface $addressInformation
     ) {
-        $shippingAddress = $addressInformation->getShippingAddress();
-        if ($shippingAddressExtensionAttributes = $shippingAddress->getExtensionAttributes()) {
-            $pointId = $shippingAddressExtensionAttributes->getInpostPointId();
-            $shippingAddress->setInpostPointId($pointId);
+        if ($extAttributes = $addressInformation->getExtensionAttributes()) {
+            $inpostPointId = $extAttributes->getInpostPointId();
+            $addressInformation->getShippingAddress()->setInpostPointId($inpostPointId);
         }
 
         return [$cartId, $addressInformation];

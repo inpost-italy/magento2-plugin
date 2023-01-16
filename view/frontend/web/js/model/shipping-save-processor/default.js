@@ -36,9 +36,9 @@ define([
                 selectBillingAddressAction(quote.shippingAddress());
             }
 
-            console.log($('#qwerty').val());
+            console.log($('#inpost_selected_point_id').val());
 
-            if (quote.shippingMethod()['method_code'] === 'inpost' && $('#qwerty').val() === null) {
+            if (quote.shippingMethod()['method_code'] === 'inpost' && $('#inpost_selected_point_id').val() === '') {
                 alert('Please select Inpost Pickup Point first.');
                 return;
             }
@@ -50,7 +50,7 @@ define([
                     'shipping_method_code': quote.shippingMethod()['method_code'],
                     'shipping_carrier_code': quote.shippingMethod()['carrier_code'],
                     'extension_attributes': {
-                        'inpost_point_id': $('#qwerty').val()
+                        'inpost_point_id': $('#inpost_selected_point_id').val()
                     }
                 }
             };
