@@ -2,7 +2,6 @@
 
 namespace InPost\Shipment\Plugin\Checkout\Model;
 
-use Magento\Quote\Model\QuoteRepository;
 use Magento\Checkout\Model\ShippingInformationManagement;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 
@@ -25,5 +24,7 @@ class ShippingInformationManagementPlugin
             $pointId = $shippingAddressExtensionAttributes->getInpostPointId();
             $shippingAddress->setInpostPointId($pointId);
         }
+
+        return [$cartId, $addressInformation];
     }
 }
