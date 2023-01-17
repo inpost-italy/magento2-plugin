@@ -1,8 +1,7 @@
 define([
     'mage/utils/wrapper',
-    'Magento_Customer/js/customer-data',
     'jquery'
-], function (wrapper, customerStorage, $) {
+], function (wrapper, $) {
     'use strict';
 
     return function (selectShippingMethod) {
@@ -12,13 +11,11 @@ define([
                     $('#easypack-map-modal-toggler').show();
                 } else {
                     $('#easypack-map-modal-toggler').hide();
+                    $('#inpost_selected_point_id').val('');
                 }
             }
 
             _super(shippingMethod);
-            if (shippingMethod) {
-                // your logic after shippingMethod set to quote
-            }
         });
     };
 });

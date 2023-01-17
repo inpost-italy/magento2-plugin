@@ -1,33 +1,14 @@
 define([
     'uiComponent',
     'jquery',
-    'knockout',
-    'Magento_Customer/js/customer-data',
-    'domReady'
+    'knockout'
     ],
 function(
     Component,
     $,
-    ko,
-    storage,
-    domReady
+    ko
 ) {
     'use strict';
-
-    domReady(function () {
-        let modalToggler = $('#easypack-map-modal-toggler'),
-            inpostLabelCell = $('#label_carrier_inpost_inpost');
-
-        console.log(modalToggler);
-
-        modalToggler.css({
-            'position': 'absolute',
-            'top': 0,
-            'right': 0
-        });
-        inpostLabelCell.css({'position': 'absolute'});
-        modalToggler.appendTo(inpostLabelCell);
-    });
 
     return Component.extend({
         defaults: {
@@ -36,12 +17,10 @@ function(
         config:     window.checkoutConfig,
         initialize: function() {
             this.initWidget(this.config);
+            this.positionInpostButton;
             this._super();
         },
         initWidget: function (config) {
-            console.log('init.widget')
-
-            window.localStorage.removeItem('inpost_point_id');
             window.easyPackAsyncInit = function () {
                 easyPack.init({
                     defaultLocale: 'pl',
@@ -56,16 +35,41 @@ function(
                         initialTypes: ['parcel_locker']
                     }
                 });
-            };
+            }
 
             window.openInPostModal = function () {
-                easyPack.modalMap(function(point, modal) {
+                $('#inpost_overlay').show();
+
+                let postCode =  $('input[name="postcode"]').val();
+                let modalWidget = easyPack.modalMap(function(point, modal) {
                     modal.closeModal();
-                    console.log(point);
                     $('#inpost_selected_point_id').val(point.name);
-                    //window.localStorage.setItem('inpost_point_id', point.name);
+                    $('#inpost_overlay').hide();
                 }, { width: 1200, height: 600 });
+
+                if (postCode) {
+                    modalWidget.searchPlace(postCode);
+                }
+
+                $('#widget-modal .widget-modal__close').click(function () {
+                    $('#inpost_overlay').hide();
+                });
             }
+
+            $( document ).ready(function() {
+                let modalToggler = $('#easypack-map-modal-toggler'),
+                    inpostLabelCell = $('#label_carrier_inpost_inpost');
+
+                console.log(modalToggler);
+
+                modalToggler.css({
+                    'position': 'absolute',
+                    'top': 0,
+                    'right': 0
+                });
+                inpostLabelCell.css({'position': 'absolute'});
+                modalToggler.appendTo(inpostLabelCell);
+            });
 
             return this.widget;
         }

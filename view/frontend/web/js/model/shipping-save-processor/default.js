@@ -36,8 +36,6 @@ define([
                 selectBillingAddressAction(quote.shippingAddress());
             }
 
-            console.log($('#inpost_selected_point_id').val());
-
             if (quote.shippingMethod()['method_code'] === 'inpost' && $('#inpost_selected_point_id').val() === '') {
                 alert('Please select Inpost Pickup Point first.');
                 return;
