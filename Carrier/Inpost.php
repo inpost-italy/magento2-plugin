@@ -27,6 +27,8 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
 
     protected $_rateMethodFactory;
 
+    protected $_code = 'inpost';
+
     /**
      * @var ResultFactory
      */
@@ -65,14 +67,17 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         /** @var Result $result */
         $result = $this->rateResultFactory->create();
         $method = $this->rateMethodFactory->create();
+
+        if ($this->getConfigData('general/active')) {
+            return $result;
+        }
+
         $method->setCarrier(self::CARRIER_CODE);
         $method->setMethod(self::ALLOWED_METHODS);
-
         $method->setCarrierTitle('InPost');
-        $method->getShippingMethodTitle('InPost');
         $method->setMethodTitle('InPost');
-        $method->setPrice(self::PRICE);
-        $method->setCost(self::PRICE);
+        $method->setPrice($this->getConfigData('general/price'));
+        $method->setCost($this->getConfigData('general/price'));
         $result->append($method);
 
         return $result;

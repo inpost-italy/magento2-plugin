@@ -45,7 +45,6 @@
             </field>
         </group>
 
-
         <group id="credentials" showInDefault="1" showInWebsite="1" showInStore="1">
           <label>Credentials</label>
            <field id="merchant_id" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
