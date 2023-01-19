@@ -68,7 +68,7 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         $result = $this->rateResultFactory->create();
         $method = $this->rateMethodFactory->create();
 
-        if ($this->getConfigData('general/active')) {
+        if (!$this->getConfigData('general/active')) {
             return $result;
         }
 
