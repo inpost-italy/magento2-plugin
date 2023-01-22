@@ -5,4 +5,8 @@
     <extension_attributes for="Magento\Checkout\Api\Data\ShippingInformationInterface">
         <attribute code="inpost_point_id" type="string" />
     </extension_attributes>
+
+    <extension_attributes for="Magento\Quote\Api\Data\AddressInterface">
+        <attribute code="inpost_point_id" type="string" />
+    </extension_attributes>
 </config>
