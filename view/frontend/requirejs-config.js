@@ -3,7 +3,7 @@ var config = {
         '*': {
             inpostForm: 'InPost_Shipment/js/inpostForm',
             'Magento_Checkout/template/shipping-address/shipping-method-item.html': 'InPost_Shipment/template/shipping-address/shipping-method-item.html',
-            'Magento_Checkout/js/model/shipping-save-processor/default':'InPost_Shipment/js/model/shipping-save-processor/default'
+            'Magento_Checkout/js/model/shipping-save-processor/payload-extender':'InPost_Shipment/js/model/shipping-save-processor/payload-extender'
         }
     },
     config: {

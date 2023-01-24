@@ -1,11 +1,10 @@
 <?php
 
-namespace Inpost\Shipment\Carrier;
+namespace InPost\Shipment\Carrier;
 
 use InPost\Shipment\Api\Data\PointsServiceRequestFactory;
 use InPost\Shipment\Service\Api\PointsApiService;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
@@ -88,8 +87,21 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
             return $result;
         }
 
+        // Allowed countries validation
+        if (!$this->checkAvailableShipCountries($request)) {
+            return $result;
+        }
+
         $pointId = $this->fetchOption($request);
-        $pointInfo = $this->getPointInfo($pointId) ? $this->getPointInfo($pointId): 'Inpost';
+        $pointInfo = 'InPost';
+        if ($pointId) {
+            $apiPointsRequest = $this->pointsServiceRequestFactory->create();
+            $apiPointsRequest->setName($pointId);
+            $points = $this->pointsApiService->getPoints($apiPointsRequest);
+            $point = $points->getFirstItem();
+            $pointInfo = $point->getAddressInfo();
+        }
+
 
         $method = $this->rateMethodFactory->create();
         $method->setCarrier(self::CARRIER_CODE);
@@ -139,5 +151,54 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         $points = $this->pointsApiService->getPoints($apiPointsRequest);
 
         return $points->getItemsCount() ? $points->getFirstItem()->getAddressInfo() : null;
+    }
+
+    /**
+     * Validate request for available ship countries.
+     *
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function checkAvailableShipCountries(\Magento\Framework\DataObject $request)
+    {
+        $speCountriesAllow = $this->getConfigData('general/sallowspecific');
+        /*
+         * for specific countries, the flag will be 1
+         */
+        if ($speCountriesAllow && $speCountriesAllow == 1) {
+            $showMethod = $this->getConfigData('general/showmethod');
+            $availableCountries = [];
+            if ($this->getConfigData('general/specificcountry')) {
+                $availableCountries = explode(',', $this->getConfigData('general/specificcountry'));
+            }
+            if ($availableCountries && in_array($request->getDestCountryId(), $availableCountries)) {
+                return $this;
+            } elseif ($showMethod && (!$availableCountries || $availableCountries && !in_array(
+                        $request->getDestCountryId(),
+                        $availableCountries
+                    ))
+            ) {
+                $error = $this->_rateErrorFactory->create();
+                $error->setCarrier($this->_code);
+                $error->setCarrierTitle($this->getConfigData('title'));
+                $errorMsg = $this->getConfigData('general/specificerrmsg');
+                $error->setErrorMessage(
+                    $errorMsg ? $errorMsg : __(
+                        'Sorry, but we can\'t deliver to the destination country with this shipping module.'
+                    )
+                );
+
+                return $error;
+            } else {
+                /*
+                 * The admin set not to show the shipping module if the delivery country
+                 * is not within specific countries
+                 */
+                return false;
+            }
+        }
+
+        return $this;
     }
 }

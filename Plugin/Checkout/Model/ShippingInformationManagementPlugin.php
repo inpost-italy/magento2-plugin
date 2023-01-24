@@ -4,6 +4,7 @@ namespace InPost\Shipment\Plugin\Checkout\Model;
 
 use Magento\Checkout\Model\ShippingInformationManagement;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
+use Magento\Framework\Exception\InputException;
 
 class ShippingInformationManagementPlugin
 {
@@ -21,6 +22,13 @@ class ShippingInformationManagementPlugin
     ) {
         if ($extAttributes = $addressInformation->getExtensionAttributes()) {
             $inpostPointId = $extAttributes->getInpostPointId();
+
+            if (!$inpostPointId && $addressInformation->getShippingCarrierCode() === \InPost\Shipment\Carrier\Inpost::CARRIER_CODE) {
+                throw new InputException(
+                    __('Cannot proceed checkout without selected Inpost Point.')
+                );
+            }
+
             $addressInformation->getShippingAddress()->setInpostPointId($inpostPointId);
         }
 

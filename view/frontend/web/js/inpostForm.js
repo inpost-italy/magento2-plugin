@@ -42,6 +42,7 @@ define([
 
                     let modalWidget = easyPack.modalMap(function (point, modal) {
                         console.log(point);
+                        modal.closeModal();
                         $('#inpost-point-details').show();
 
                         $('#inpost-point-details').find('.point-name').html(point.name);
