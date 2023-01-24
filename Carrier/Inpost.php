@@ -89,15 +89,7 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         }
 
         $pointId = $this->fetchOption($request);
-        $pointInfo = 'InPost';
-        if ($pointId) {
-            $apiPointsRequest = $this->pointsServiceRequestFactory->create();
-            $apiPointsRequest->setName($pointId);
-            $points = $this->pointsApiService->getPoints($apiPointsRequest);
-            $point = $points->getFirstItem();
-            $pointInfo = $point->getAddressInfo();
-        }
-
+        $pointInfo = $this->getPointInfo($pointId) ? $this->getPointInfo($pointId): 'Inpost';
 
         $method = $this->rateMethodFactory->create();
         $method->setCarrier(self::CARRIER_CODE);
@@ -138,5 +130,14 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
     public function getAllowedMethods()
     {
         return [self::METHOD_LOCKER, self::METHOD_COURIER];
+    }
+
+    private function getPointInfo(?string $pointId) : ?string
+    {
+        $apiPointsRequest = $this->pointsServiceRequestFactory->create();
+        $apiPointsRequest->setName($pointId);
+        $points = $this->pointsApiService->getPoints($apiPointsRequest);
+
+        return $points->getItemsCount() ? $points->getFirstItem()->getAddressInfo() : null;
     }
 }

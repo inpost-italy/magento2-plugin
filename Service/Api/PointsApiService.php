@@ -19,7 +19,7 @@ class PointsApiService
         \InPost\Shipment\Service\Http\ClientFactory $httpClient,
         \InPost\Shipment\Api\Data\PointDataFactory $pointDataFactory,
         \InPost\Shipment\Api\Data\PointsServiceResponseFactory $pointsServiceResponseFactory
-    ){
+    ) {
         $this->httpClientFactory = $httpClient;
         $this->pointDataFactory = $pointDataFactory;
         $this->pointsServiceResponseFactory = $pointsServiceResponseFactory;

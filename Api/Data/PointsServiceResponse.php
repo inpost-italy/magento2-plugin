@@ -15,6 +15,6 @@ class PointsServiceResponse extends DataObject
     {
         $items = $this->getItems();
 
-        return $items[0];
+        return $items[0] ?? new PointData([]);
     }
 }
