@@ -53,8 +53,6 @@ define([
                 }
             };
 
-            console.log('save processor');
-
             // payloadExtender(payload);
 
             fullScreenLoader.startLoader();

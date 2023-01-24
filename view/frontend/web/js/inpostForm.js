@@ -1,77 +1,79 @@
 define([
-    'uiComponent',
-    'jquery',
-    'knockout'
+        'uiComponent',
+        'jquery',
+        'knockout'
     ],
-function(
-    Component,
-    $,
-    ko
-) {
-    'use strict';
+    function (
+        Component,
+        $,
+        ko
+    ) {
+        'use strict';
 
-    return Component.extend({
-        defaults: {
-            template: 'InPost_Shipment/form'
-        },
-        config:     window.checkoutConfig,
-        initialize: function() {
-            this.initWidget(this.config);
-            this.positionInpostButton;
-            this._super();
-        },
-        initWidget: function (config) {
-            window.easyPackAsyncInit = function () {
-                easyPack.init({
-                    defaultLocale: 'it',
-                    mapType: 'osm',
-                    searchType: 'osm',
-                    points: {
-                        types: ['pop', 'parcel_locker'],
-                        allowedToolTips: ['pok', 'pop'],
-                        functions: []
-                    },
-                    map: {
-                        initialTypes: ['parcel_locker']
-                    }
-                });
-            }
+        return Component.extend({
+            defaults: {
+                template: 'InPost_Shipment/form'
+            },
+            config: window.checkoutConfig,
+            initialize: function () {
+                this.initWidget(this.config);
+                this._super();
+            },
+            initWidget: function (config) {
 
-            window.openInPostModal = function () {
-                $('#inpost_overlay').show();
-
-                let postCode =  $('input[name="postcode"]').val();
-                let modalWidget = easyPack.modalMap(function(point, modal) {
-                    modal.closeModal();
-                    $('#inpost_selected_point_id').val(point.name);
-                    $('#inpost_overlay').hide();
-                }, { width: 1200, height: 600 });
-
-                if (postCode) {
-                    modalWidget.searchPlace(postCode);
+                window.easyPackAsyncInit = function () {
+                    easyPack.init({
+                        defaultLocale: 'pl',
+                        mapType: 'osm',
+                        searchType: 'osm',
+                        points: {
+                            types: ['pop', 'parcel_locker'],
+                            allowedToolTips: ['pok', 'pop'],
+                            functions: []
+                        },
+                        map: {
+                            initialTypes: ['parcel_locker']
+                        }
+                    });
                 }
 
-                $('#widget-modal .widget-modal__close').click(function () {
-                    $('#inpost_overlay').hide();
-                });
+                window.openInPostModal = function () {
+                    $('#inpost_overlay').show();
+
+                    let modalWidget = easyPack.modalMap(function (point, modal) {
+                        console.log(point);
+                        $('#inpost-point-details').show();
+
+                        $('#inpost-point-details').find('.point-name').html(point.name);
+                        $('#inpost-point-details').find('.point-address').html(point.address.line1);
+                        $('#inpost-point-details').find('.point-postcode').html(point.address.line2);
+                        $('#inpost-point-details').find('.point-opening-hours').html(point.opening_hours);
+
+                        $('#remove-selected-point').show();
+                        $('#inpost_selected_point_id').val(point.name);
+                        $('#inpost_overlay').hide();
+                    }, {width: 1200, height: 600});
+
+                    if ($('input[name="postcode"]').val()) {
+                        modalWidget.searchPlace($('input[name="postcode"]').val());
+                    }
+
+                    $('#widget-modal .widget-modal__close').click(function () {
+                        $('#inpost_overlay').hide();
+                    });
+                }
+
+                window.removeSelectedPoint = function () {
+                    $('#inpost_selected_point_id').val('');
+                    $('#inpost-point-details').find('.point-name').html('');
+                    $('#inpost-point-details').find('.point-address').html('');
+                    $('#inpost-point-details').find('.point-postcode').html('');
+                    $('#inpost-point-details').find('.point-opening_hours').html('');
+                    $('#inpost-point-details').hide();
+                    $('#remove-selected-point').hide();
+                }
+
+                return this.widget;
             }
-
-            $( document ).ready(function() {
-                let modalToggler = $('#easypack-map-modal-toggler'),
-                    inpostLabelCell = $('#label_carrier_inpost_inpost');
-
-                console.log(modalToggler);
-
-                modalToggler.css({
-                    'position': 'absolute',
-                    'top': 0,
-                    'right': 0
-                });
-                inpostLabelCell.css({'position': 'absolute'});
-                modalToggler.appendTo(inpostLabelCell);
-            });
-
-            return this.widget;
-        }
+        });
     });
-});
