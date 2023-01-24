@@ -17,4 +17,9 @@ class PointsServiceResponse extends DataObject
 
         return $items[0] ?? new PointData([]);
     }
+
+    public function isEmpty() : bool
+    {
+        return empty($this->getItems());
+    }
 }

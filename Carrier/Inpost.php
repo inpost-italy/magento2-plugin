@@ -18,15 +18,13 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
 {
     const ALLOWED_METHODS = 'inpost';
 
-    private const PRICE = 10;
+    const CARRIER_TITLE = 'InPost';
 
     const CARRIER_CODE = 'inpost';
 
     const METHOD_LOCKER = 'inpost_loceker';
 
     const METHOD_COURIER = 'inpost_courier';
-
-    protected $_rateMethodFactory;
 
     protected $_code = 'inpost';
 
@@ -71,6 +69,40 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         $this->pointsServiceRequestFactory = $pointsServiceRequestFactory;
     }
 
+    public function isShippingLabelsAvailable()
+    {
+        return true;
+    }
+
+    public function requestToShipment($request)
+    {
+        return new \Magento\Framework\DataObject(['info' => [
+           'label_content' => 'label',
+            'tracking_number' => 'TRACK'
+        ]]);
+    }
+
+    public function isTrackingAvailable()
+    {
+        return true;
+    }
+
+    public function getCustomizableContainerTypes()
+    {
+        return  [];
+    }
+
+    public function getContainerTypes($params = null, $storeId = null)
+    {
+        /* @codingStandardsIgnoreEnd */
+        return  [
+            'looker_S' => __('Inpost locker S'),
+            'looker_M' => __('Inpost locker M'),
+            'looker_L' => __('Inpost locker L'),
+        ];
+    }
+
+
     /**
      * Collect rates
      *
@@ -93,22 +125,14 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         }
 
         $pointId = $this->fetchOption($request);
-        $pointInfo = 'InPost';
-        if ($pointId) {
-            $apiPointsRequest = $this->pointsServiceRequestFactory->create();
-            $apiPointsRequest->setName($pointId);
-            $points = $this->pointsApiService->getPoints($apiPointsRequest);
-            $point = $points->getFirstItem();
-            $pointInfo = $point->getAddressInfo();
-        }
-
+        $methodTitle = $pointId ? $this->getPointInfo($pointId) : self::CARRIER_TITLE;
 
         $method = $this->rateMethodFactory->create();
         $method->setCarrier(self::CARRIER_CODE);
         $method->setMethod(self::ALLOWED_METHODS);
 
-        $method->setCarrierTitle('InPost');
-        $method->setMethodTitle($pointInfo);
+        $method->setCarrierTitle(self::CARRIER_TITLE);
+        $method->setMethodTitle($methodTitle);
         $method->setPrice($this->getConfigData('general/price'));
         $method->setCost($this->getConfigData('general/price'));
         $result->append($method);
@@ -150,7 +174,7 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         $apiPointsRequest->setName($pointId);
         $points = $this->pointsApiService->getPoints($apiPointsRequest);
 
-        return $points->getItemsCount() ? $points->getFirstItem()->getAddressInfo() : null;
+        return !$points->isEmpty() ? $points->getFirstItem()->getAddressInfo() : null;
     }
 
     /**
