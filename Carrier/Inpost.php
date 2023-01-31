@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace InPost\Shipment\Carrier;
 
@@ -12,9 +13,10 @@ use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
+use Magento\Checkout\Model\Session;
 use Psr\Log\LoggerInterface;
 
-class Inpost  extends AbstractCarrier implements CarrierInterface
+class Inpost extends AbstractCarrier implements CarrierInterface
 {
     const ALLOWED_METHODS = 'inpost';
 
@@ -28,17 +30,16 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
 
     protected $_code = 'inpost';
 
-    /**
-     * @var ResultFactory
-     */
+    /** @var ResultFactory */
     private $rateResultFactory;
 
-    /**
-     * @var MethodFactory
-     */
+    /** @var MethodFactory */
     private $rateMethodFactory;
 
-    private \InPost\Shipment\Service\Api\PointsApiService $pointsApiService;
+    /** @var Session */
+    private $checkoutSession;
+
+    private PointsApiService $pointsApiService;
 
     private PointsServiceRequestFactory $pointsServiceRequestFactory;
 
@@ -50,6 +51,8 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
      * @param MethodFactory $rateMethodFactory
      * @param PointsApiService $pointsApiService
      * @param PointsServiceRequestFactory $pointsServiceRequestFactory
+     * @param Session $checkoutSession
+     * @param array $data
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -57,12 +60,14 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         LoggerInterface $logger,
         ResultFactory $rateResultFactory,
         MethodFactory $rateMethodFactory,
-        \InPost\Shipment\Service\Api\PointsApiService $pointsApiService,
-        \InPost\Shipment\Api\Data\PointsServiceRequestFactory $pointsServiceRequestFactory,
+        PointsApiService $pointsApiService,
+        PointsServiceRequestFactory $pointsServiceRequestFactory,
+        Session $checkoutSession,
         array $data = []
     ) {
         $this->rateResultFactory = $rateResultFactory;
         $this->rateMethodFactory = $rateMethodFactory;
+        $this->checkoutSession = $checkoutSession;
 
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
         $this->pointsApiService = $pointsApiService;
@@ -76,10 +81,12 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
 
     public function requestToShipment($request)
     {
-        return new \Magento\Framework\DataObject(['info' => [
-           'label_content' => 'label',
-            'tracking_number' => 'TRACK'
-        ]]);
+        return new \Magento\Framework\DataObject([
+            'info' => [
+                'label_content' => 'label',
+                'tracking_number' => 'TRACK'
+            ]
+        ]);
     }
 
     public function isTrackingAvailable()
@@ -89,13 +96,13 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
 
     public function getCustomizableContainerTypes()
     {
-        return  [];
+        return [];
     }
 
     public function getContainerTypes($params = null, $storeId = null)
     {
         /* @codingStandardsIgnoreEnd */
-        return  [
+        return [
             'looker_S' => __('Inpost locker S'),
             'looker_M' => __('Inpost locker M'),
             'looker_L' => __('Inpost locker L'),
@@ -124,6 +131,11 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
             return $result;
         }
 
+        // Weight limitations check
+        if (!$this->validateWeightLimits()) {
+            return $result;
+        }
+
         $pointId = $this->fetchOption($request);
         $methodTitle = $pointId ? $this->getPointInfo($pointId) : self::CARRIER_TITLE;
 
@@ -145,11 +157,11 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
      *
      * @return array|null
      */
-    private function fetchOption(RateRequest $request) : ?string
+    private function fetchOption(RateRequest $request): ?string
     {
         /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
         $quoteItem = current($request->getAllItems());
-        if (! $quoteItem) {
+        if (!$quoteItem) {
             return null;
         }
         $address = $quoteItem->getQuote()->getShippingAddress();
@@ -168,7 +180,7 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         return [self::METHOD_LOCKER, self::METHOD_COURIER];
     }
 
-    private function getPointInfo(?string $pointId) : ?string
+    private function getPointInfo(?string $pointId): ?string
     {
         $apiPointsRequest = $this->pointsServiceRequestFactory->create();
         $apiPointsRequest->setName($pointId);
@@ -224,5 +236,30 @@ class Inpost  extends AbstractCarrier implements CarrierInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    protected function validateWeightLimits(): bool
+    {
+        $totalWeight = 0;
+        $itemWeightLimit = (float)$this->getConfigData('delivery_options/max_item_weight');
+        $totalCartWeightLimit = (float)$this->getConfigData('delivery_options/max_total_cart_weight');
+
+        foreach ($this->checkoutSession->getQuote()->getAllItems() as $item) {
+            if ($itemWeightLimit > 0 && $item->getWeight() > $itemWeightLimit) {
+                return false;
+            }
+            $totalWeight += ($item->getWeight() * $item->getQty());
+        }
+
+        if ($totalCartWeightLimit > 0 && $totalWeight > $totalCartWeightLimit) {
+            return false;
+        }
+
+        return true;
     }
 }

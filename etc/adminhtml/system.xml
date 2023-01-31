@@ -88,8 +88,24 @@
                     <label>PDF</label>
                 </group>
 
-                <group id="options" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Options</label>
+                <group id="delivery_options" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Delivery options</label>
+                    <field id="max_item_weight" translate="label" type="text" sortOrder="290" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                        <label>Max Item Wight</label>
+                        <comment>Leave empty or 0 to ignore this setting.</comment>
+                    </field>
+                    <field id="max_total_cart_weight" translate="label" type="text" sortOrder="290" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                        <label>Max Total Cart Wight</label>
+                        <comment>Leave empty or 0 to ignore this setting.</comment>
+                    </field>
                 </group>
             </group>
         </section>

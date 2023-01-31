@@ -23,7 +23,7 @@ define([
 
                 window.easyPackAsyncInit = function () {
                     easyPack.init({
-                        defaultLocale: 'pl',
+                        defaultLocale: 'it',
                         mapType: 'osm',
                         searchType: 'osm',
                         points: {

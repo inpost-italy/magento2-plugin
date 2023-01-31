@@ -1,42 +1,46 @@
 <?php
+declare(strict_types=1);
 
 namespace InPost\Shipment\Service\Api;
 
+use InPost\Shipment\Api\Data\PointDataFactory;
 use InPost\Shipment\Api\Data\PointsServiceRequest;
 use InPost\Shipment\Api\Data\PointsServiceResponse;
+use InPost\Shipment\Api\Data\PointsServiceResponseFactory;
+use InPost\Shipment\Config\ConfigProvider;
+use InPost\Shipment\Service\Http\ClientFactory;
 use InPost\Shipment\Service\Http\HttpClientException;
-use Magento\Framework\DataObject;
 
 class PointsApiService
 {
-    private \InPost\Shipment\Service\Http\ClientFactory $httpClientFactory;
+    private ClientFactory $httpClientFactory;
 
-    private \InPost\Shipment\Api\Data\PointDataFactory $pointDataFactory;
+    private PointDataFactory $pointDataFactory;
 
-    private \InPost\Shipment\Api\Data\PointsServiceResponseFactory $pointsServiceResponseFactory;
+    private PointsServiceResponseFactory $pointsServiceResponseFactory;
+
+    private $configProvider;
 
     public function __construct(
-        \InPost\Shipment\Service\Http\ClientFactory $httpClient,
-        \InPost\Shipment\Api\Data\PointDataFactory $pointDataFactory,
-        \InPost\Shipment\Api\Data\PointsServiceResponseFactory $pointsServiceResponseFactory
+        ClientFactory $httpClient,
+        PointDataFactory $pointDataFactory,
+        PointsServiceResponseFactory $pointsServiceResponseFactory,
+        ConfigProvider $configProvider
     ) {
         $this->httpClientFactory = $httpClient;
         $this->pointDataFactory = $pointDataFactory;
         $this->pointsServiceResponseFactory = $pointsServiceResponseFactory;
+        $this->configProvider = $configProvider;
     }
-
-    /** @var string TODO config */
-    private const API_BASE_URL = 'https://api-it-points.easypack24.net';
 
     public function getPoints(PointsServiceRequest $pointsServiceRequest) : PointsServiceResponse
     {
         $client = $this->httpClientFactory->create();
         $params = $pointsServiceRequest->getData();
 
-
         try {
             $response = $client->get(
-                self::API_BASE_URL . '/v1/points',
+                $this->configProvider->getApiBaseUrl() . '/v1/points',
                 $params
             );
         } catch (HttpClientException $e) {
