@@ -4,4 +4,8 @@
     <table comment="Inpost Point Id" engine="innodb" name="inpost_point_id" resource="default">
         <column name="inpost_point_id" nullable="true" xsi:type="varchar" comment="order id"/>
     </table>
+
+    <table name="sales_order_address">
+        <column name="inpost_point_id" nullable="true" xsi:type="varchar" comment="order id"/>
+    </table>
 </schema>

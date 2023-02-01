@@ -6,9 +6,18 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
     <type name="Magento\Checkout\Model\ShippingInformationManagement">
         <plugin name="inpost_shippinginformation_extension_attribute"
                 type="\InPost\Shipment\Plugin\Checkout\Model\ShippingInformationManagementPlugin"
                 sortOrder="1" />
+    </type>
+
+    <type name="Magento\Quote\Model\Quote\Address\ToOrderAddress">
+        <plugin name="inpost_shipping_convert_address" type="InPost\Shipment\Plugin\Quote\Address\ToOrderAddress"/>
+    </type>
+
+    <type name="Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save">
+        <plugin name="inpost_create_shipping" type="\InPost\Shipment\Plugin\Adminhtml\Order\Shipping\CreateInpostShipping"/>
     </type>
 </config>
