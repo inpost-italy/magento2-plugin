@@ -1,0 +1,6 @@
+<?php /** @var InPost\Shipment\Block\Adminhtml\Order\View\Buttons\LabelsButton $block */ ?>
+<?php if ($block->canShowButton()): ?>
+<button type="button" class="action-default" onclick="window.location='<?php echo $block->getButtonUrl(); ?>'">
+    <span><?php echo __('Print InPost Labels'); ?></span>
+</button>
+<?php endif; ?>

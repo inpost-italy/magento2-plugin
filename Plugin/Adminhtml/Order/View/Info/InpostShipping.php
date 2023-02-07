@@ -50,8 +50,11 @@ class InpostShipping
         if (!strpos($order->getShippingMethod(), Inpost::CARRIER_CODE) == false) {
             return $result;
         }
+        
+        if (!$pointId = $order->getShippingAddress()->getInpostPointId()) {
+            return $result;
+        }
 
-        $pointId = $order->getShippingAddress()->getInpostPointId();
         $addressInformation = $this->getInpostPointInfo($pointId);
 
         if ($this->hasHandle($subject, 'sales_order_view')) {

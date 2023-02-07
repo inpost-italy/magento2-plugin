@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace InPost\Shipment\Carrier;
 
 use InPost\Shipment\Api\Data\PointsServiceRequestFactory;
+use InPost\Shipment\Config\ConfigProvider;
 use InPost\Shipment\Service\Api\PointsApiService;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
@@ -43,6 +46,12 @@ class Inpost extends AbstractCarrier implements CarrierInterface
 
     private PointsServiceRequestFactory $pointsServiceRequestFactory;
 
+    /** @var CollectionFactory */
+    private $categoryCollectionFactory;
+
+    /** @var ConfigProvider */
+    private $configProvider;
+
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param ErrorFactory $rateErrorFactory
@@ -52,6 +61,8 @@ class Inpost extends AbstractCarrier implements CarrierInterface
      * @param PointsApiService $pointsApiService
      * @param PointsServiceRequestFactory $pointsServiceRequestFactory
      * @param Session $checkoutSession
+     * @param CollectionFactory $categoryCollectionFactory
+     * @param ConfigProvider $configProvider
      * @param array $data
      */
     public function __construct(
@@ -63,11 +74,15 @@ class Inpost extends AbstractCarrier implements CarrierInterface
         PointsApiService $pointsApiService,
         PointsServiceRequestFactory $pointsServiceRequestFactory,
         Session $checkoutSession,
+        CollectionFactory $categoryCollectionFactory,
+        ConfigProvider $configProvider,
         array $data = []
     ) {
         $this->rateResultFactory = $rateResultFactory;
         $this->rateMethodFactory = $rateMethodFactory;
         $this->checkoutSession = $checkoutSession;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->configProvider = $configProvider;
 
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
         $this->pointsApiService = $pointsApiService;
@@ -115,14 +130,14 @@ class Inpost extends AbstractCarrier implements CarrierInterface
      *
      * @param RateRequest $request
      * @return Result
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function collectRates(RateRequest $request)
     {
         /** @var Result $result */
         $result = $this->rateResultFactory->create();
-        if (!$this->getConfigData('general/active')) {
+        if (!$this->configProvider->isActive()) {
             return $result;
         }
 
@@ -133,6 +148,11 @@ class Inpost extends AbstractCarrier implements CarrierInterface
 
         // Weight limitations check
         if (!$this->validateWeightLimits()) {
+            return $result;
+        }
+
+        // Validate category delivery settings
+        if (!$this->validateCategoryDeliverySettings()) {
             return $result;
         }
 
@@ -258,6 +278,33 @@ class Inpost extends AbstractCarrier implements CarrierInterface
 
         if ($totalCartWeightLimit > 0 && $totalWeight > $totalCartWeightLimit) {
             return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function validateCategoryDeliverySettings(): bool
+    {
+        $categoryIds = [];
+
+        /** @var Item $item */
+        foreach ($this->checkoutSession->getQuote()->getAllItems() as $item) {
+            $categoryIds = array_merge($categoryIds, $item->getProduct()->getCategoryIds());
+        }
+
+        $categoryCollection = $this->categoryCollectionFactory->create();
+        $categoryCollection->addFieldToFilter('entity_id', ['in' => $categoryIds])
+            ->addAttributeToSelect(ConfigProvider::ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE);
+
+        foreach ($categoryCollection as $category) {
+            if (!$category->getData(ConfigProvider::ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE)) {
+                return false;
+            }
         }
 
         return true;

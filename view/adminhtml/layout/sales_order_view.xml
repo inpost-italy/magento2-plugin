@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="sales_order_shipment_view"/>
+    <body>
+        <referenceBlock name="page.actions.toolbar">
+            <block class="InPost\Shipment\Block\Adminhtml\Order\View\Buttons\LabelsButton"
+                   name="order_label_button"
+                   template="InPost_Shipment::order/view/buttons/labels_button.phtml"/>
+        </referenceBlock>
+    </body>
+</page>

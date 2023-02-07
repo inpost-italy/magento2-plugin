@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace InPost\Shipment\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Tests\NamingConvention\true\string;
 
 class ConfigProvider
 {
+    const ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE = 'allow_inpost_delivery';
+    const XML_PATH_INPOST_GENERAL_ACTIVE = 'carriers/inpost/general/active';
     const XML_PATH_INPOST_GENERAL_DEBUG = 'carriers/inpost/general/debug';
+    const XML_PATH_INPOST_CREDENTIALS_MERCHANT_ID = 'carriers/inpost/credentials/merchant_id';
+    const XML_PATH_INPOST_CREDENTIALS_API_KEY = 'carriers/inpost/credentials/api_key';
 
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
@@ -21,6 +24,14 @@ class ConfigProvider
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive():bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_ACTIVE);
     }
 
     /**
@@ -37,5 +48,21 @@ class ConfigProvider
     public function isDebugModeEnabled(): bool
     {
         return (bool)$this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_DEBUG);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMerchantId(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_CREDENTIALS_MERCHANT_ID);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getApiKey(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_CREDENTIALS_API_KEY);
     }
 }

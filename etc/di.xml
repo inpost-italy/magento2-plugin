@@ -20,4 +20,13 @@
     <type name="Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save">
         <plugin name="inpost_create_shipping" type="\InPost\Shipment\Plugin\Adminhtml\Order\Shipping\CreateInpostShipping"/>
     </type>
+
+    <type name="Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Pdfshipments">
+        <plugin name="inpost_shipment_pdf_mass_action"
+                type="InPost\Shipment\Plugin\Adminhtml\Order\Shipping\PdfShipmentsMassAction"/>
+    </type>
+    <type name="Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\PrintAction">
+        <plugin name="inpost_shipment_pdf_print_action"
+                type="InPost\Shipment\Plugin\Adminhtml\Order\Shipping\PdfPrintAction"/>
+    </type>
 </config>
