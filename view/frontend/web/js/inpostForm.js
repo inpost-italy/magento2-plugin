@@ -14,18 +14,18 @@ define([
             defaults: {
                 template: 'InPost_Shipment/form'
             },
-            config: window.checkoutConfig,
+            config: window.checkoutConfig.inpost,
             initialize: function () {
                 this.initWidget(this.config);
                 this._super();
             },
             initWidget: function (config) {
-
                 window.easyPackAsyncInit = function () {
                     easyPack.init({
                         defaultLocale: 'it',
-                        mapType: 'osm',
-                        searchType: 'osm',
+                        apiEndpoint: 'https://api-it-points.easypack24.net/v1/',
+                        mapType: config.map_type,
+                        searchType: config.search_type,
                         points: {
                             types: ['pop', 'parcel_locker'],
                             allowedToolTips: ['pok', 'pop'],

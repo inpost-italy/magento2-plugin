@@ -156,6 +156,11 @@ class Inpost extends AbstractCarrier implements CarrierInterface
             return $result;
         }
 
+        // Validate phone number
+        if (!$this->validatePhoneNumber()) {
+            return $result;
+        }
+
         $pointId = $this->fetchOption($request);
         $methodTitle = $pointId ? $this->getPointInfo($pointId) : self::CARRIER_TITLE;
 
@@ -302,11 +307,23 @@ class Inpost extends AbstractCarrier implements CarrierInterface
             ->addAttributeToSelect(ConfigProvider::ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE);
 
         foreach ($categoryCollection as $category) {
-            if (!$category->getData(ConfigProvider::ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE)) {
+            $allowCategory = $category->getData(ConfigProvider::ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE);
+            if (is_null($allowCategory)) {
+                continue;
+            }
+
+            if (! $allowCategory) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public function validatePhoneNumber(): bool
+    {
+        $address = $this->checkoutSession->getQuote()->getShippingAddress();
+
+        return substr($address->getTelephone(), 0, 2 ) === "39";
     }
 }

@@ -107,6 +107,20 @@
                         <comment>Leave empty or 0 to ignore this setting.</comment>
                     </field>
                 </group>
+
+                <group id="widget" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Widget settings</label>
+                    <field id="map_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                           showInStore="1">
+                        <label>Map type</label>
+                        <source_model>InPost\Shipment\Config\Source\MapSources</source_model>
+                    </field>
+                    <field id="search_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                           showInStore="1">
+                        <label>Search type</label>
+                        <source_model>InPost\Shipment\Config\Source\MapSources</source_model>
+                    </field>
+                </group>
             </group>
         </section>
     </system>
