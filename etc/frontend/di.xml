@@ -4,7 +4,7 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="additional_provider" xsi:type="object">InPost\Shipment\Config\Checkout\InpostConfigProvider</item>
+                <item name="inpost_provider" xsi:type="object">InPost\Shipment\Config\Checkout\InpostConfigProvider</item>
             </argument>
         </arguments>
     </type>
