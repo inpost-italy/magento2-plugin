@@ -10,6 +10,10 @@
                 <title>InPost</title>
                 <description>InPost shipping methods</description>
                 <sort_order>0</sort_order>
+                <widget>
+                    <search_type>google</search_type>
+                    <map_type>google</map_type>
+                </widget>
             </inpost>
         </carriers>
     </default>

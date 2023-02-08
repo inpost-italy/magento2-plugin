@@ -46,7 +46,7 @@ class InpostShipping
     {
         $order = $subject->getOrder();
 
-        // adminhtml_order_shipment_view
+        // If we don't have an Inpost shipping method
         if (!strpos($order->getShippingMethod(), Inpost::CARRIER_CODE) == false) {
             return $result;
         }
@@ -136,7 +136,7 @@ class InpostShipping
         $inpostPointRequest->setName($pointId);
         $points = $this->pointsApiService->getPoints($inpostPointRequest);
         
-        return $this->formatHtml($points->getFirstItem());
+        return $points->getItemsCount() ? $this->formatHtml($points->getFirstItem()) : 'No point information';
     }
 
     private function formatHtml(\InPost\Shipment\Api\Data\PointData $pointData)
