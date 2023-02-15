@@ -8,4 +8,8 @@
     <table name="sales_order_address">
         <column name="inpost_point_id" nullable="true" xsi:type="varchar" comment="order id"/>
     </table>
+
+    <table name="sales_shipment">
+        <column name="inpost_shipment_id" nullable="true" xsi:type="varchar" comment="Inpost Shipment ID"/>
+    </table>
 </schema>

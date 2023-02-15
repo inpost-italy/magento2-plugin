@@ -14,13 +14,13 @@
                     <label>General</label>
                     <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
                            showInStore="1">
-                        <label>Is active?</label>
+                        <label>Enable For Checkout</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
 
                     <field id="debug" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
                            showInStore="1">
-                        <label>Debug mode</label>
+                        <label>Sandbox mode</label>
                         <depends>
                             <field id="active">1</field>
                         </depends>
@@ -32,7 +32,7 @@
                         <depends>
                             <field id="active">1</field>
                         </depends>
-                        <validate>validate-number validate-zero-or-greater</validate>
+                        <validate>validate-zero-or-greater</validate>
                     </field>
 
                     <field id="sallowspecific" translate="label" type="select" sortOrder="225" showInDefault="1"

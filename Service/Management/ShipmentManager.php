@@ -57,9 +57,11 @@ class ShipmentManager
 
         $this->builder->setReceiver([
             'first_name' => $order->getCustomerFirstname(),
-            'last_name' => $order->getCustomerFirstname(),
+            'last_name' => $order->getCustomerLastname(),
             'email' => $order->getCustomerEmail(),
+            // TODO: Remove hardcoded telephone
             'phone' => "500355111",
+//            'phone' => $address->getTelephone(),
             'address' => [
                 'city' => $address->getCity(),
                 'post_code' => $address->getPostcode(),
@@ -75,8 +77,8 @@ class ShipmentManager
 
         $this->builder->setService('inpost_locker_standard');
         $this->builder->setCustomAttributes([
-//            'target_point' => $address->getInpostPointId()
-            'target_point' => 'ITARC23379'
+            'target_point' => $address->getInpostPointId()
+//            'target_point' => 'ITARC23379'
         ]);
 
 
@@ -88,6 +90,7 @@ class ShipmentManager
             $shipmentCreationResponse['service'],
             $shipmentCreationResponse['id']
         );
+        $this->addInpostShipmentId($shipment, $shipmentCreationResponse['id']);
     }
 
     /**
@@ -109,6 +112,12 @@ class ShipmentManager
         $track = $this->trackFactory->create()->addData($data);
         $shipment->addTrack($track);
 
+        $this->shipmentRepository->save($shipment);
+    }
+
+    private function addInpostShipmentId(Shipment $shipment, string $inpostShipmentId)
+    {
+        $shipment->setData('inpost_shipment_id', $inpostShipmentId);
         $this->shipmentRepository->save($shipment);
     }
 }

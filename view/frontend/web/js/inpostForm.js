@@ -1,10 +1,12 @@
 define([
         'uiComponent',
+        'Magento_Checkout/js/model/quote',
         'jquery',
         'knockout'
     ],
     function (
         Component,
+        quote,
         $,
         ko
     ) {
@@ -39,9 +41,9 @@ define([
 
                 window.openInPostModal = function () {
                     $('#inpost_overlay').show();
+                    $('#inpost-required-error-message').hide();
 
                     let modalWidget = easyPack.modalMap(function (point, modal) {
-                        console.log(point);
                         modal.closeModal();
                         $('#inpost-point-details').show();
 
@@ -73,6 +75,14 @@ define([
                     $('#inpost-point-details').hide();
                     $('#remove-selected-point').hide();
                 }
+
+                $(document).on('submit','#co-shipping-method-form',function(event) {
+                    if ((quote.shippingMethod()['method_code']) === 'inpost' && $('#inpost_selected_point_id').val() === '') {
+                        $('#inpost-required-error-message').show();
+                        event.preventDefault();
+                        return false;
+                    }
+                });
 
                 return this.widget;
             }

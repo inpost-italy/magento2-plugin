@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace InPost\Shipment\Plugin\Checkout\Model;
 
 use InPost\Shipment\Api\Data\PointsServiceRequestFactory;
+use InPost\Shipment\Carrier\Inpost;
 use InPost\Shipment\Service\Api\PointsApiService;
 use Magento\Checkout\Model\ShippingInformationManagement;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
@@ -43,10 +44,11 @@ class ShippingInformationManagementPlugin
         $cartId,
         ShippingInformationInterface $addressInformation
     ): array {
-        if ($extAttributes = $addressInformation->getExtensionAttributes()) {
+        if ($addressInformation->getShippingCarrierCode() === Inpost::CARRIER_CODE && $addressInformation->getExtensionAttributes()) {
+            $extAttributes = $addressInformation->getExtensionAttributes();
             $inpostPointId = $extAttributes->getInpostPointId();
 
-            if (!$inpostPointId && $addressInformation->getShippingCarrierCode() === \InPost\Shipment\Carrier\Inpost::CARRIER_CODE) {
+            if (!$inpostPointId) {
                 throw new InputException(
                     __('Cannot proceed checkout without selected Inpost Point.')
                 );

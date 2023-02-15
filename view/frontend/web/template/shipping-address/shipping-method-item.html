@@ -22,25 +22,36 @@
         text="method.carrier_title"></td>
 </tr>
 <!-- ko if: (method.method_code == "inpost") -->
-<tr class="row" id="inpost-extra-info">
-    <td colspan="4" class="">
-        <strong data-bind="i18n: 'Inpost Pickup Point'"></strong>
-        <br>
-        <a href="#" id="easypack-map-modal-toggler" onclick="openInPostModal(); return false;"
-           data-bind="i18n: 'Open map'"></a>
-        <div id="inpost-point-details">
-            <strong data-bind="i18n: 'Name:'"></strong> <span class="point-name"></span><br>
-            <strong data-bind="i18n: 'Address:'"></strong> <span class="point-address"></span><br>
-            <strong data-bind="i18n: 'Postcode:'"></strong> <span class="point-postcode"></span><br>
-            <strong data-bind="i18n: 'Opening hours:'"></strong> <span class="point-opening-hours"></span><br>
-        </div>
-        <a href="#" id="remove-selected-point"
-           onclick="removeSelectedPoint(); return false;"
-           data-bind="i18n: 'Remove'"></a>
+<tr class="row" id="inpost-extra-info" data-mage-init='{"validation":{},"customvalidation":{}}'>
+    <td colspan="4">
+        <div class="fieldset">
+            <div class="field _required">
+                <label class="label">
+                    <strong data-bind="i18n: 'Inpost Pickup Point'"></strong>
+                </label>
+                <br>
+                <div>
+                    <a href="#" id="easypack-map-modal-toggler" onclick="openInPostModal(); return false;"
+                       data-bind="i18n: 'Open map'"></a>
+                </div>
+                <div id="inpost-point-details">
+                    <strong data-bind="i18n: 'Name:'"></strong> <span class="point-name"></span><br>
+                    <strong data-bind="i18n: 'Address:'"></strong> <span class="point-address"></span><br>
+                    <strong data-bind="i18n: 'Postcode:'"></strong> <span class="point-postcode"></span><br>
+                    <strong data-bind="i18n: 'Opening hours:'"></strong> <span class="point-opening-hours"></span><br>
+                </div>
+                <a href="#" id="remove-selected-point"
+                   onclick="removeSelectedPoint(); return false;"
+                   data-bind="i18n: 'Remove'"></a>
 
-        <input id="inpost_selected_point_id" type="hidden">
-        <div id="easypack-map"></div>
-        <div id="inpost_overlay"></div>
+                <input id="inpost_selected_point_id" name="inpost_selected_point_id" type="hidden"/>
+                <div id="inpost-required-error-message" class="field-error" style="display: none;">
+                    <span data-bind="text: 'This is a required field.'"></span>
+                </div>
+                <div id="easypack-map"></div>
+                <div id="inpost_overlay"></div>
+            </div>
+        </div>
     </td>
 </tr>
 <!-- /ko -->

@@ -320,10 +320,15 @@ class Inpost extends AbstractCarrier implements CarrierInterface
         return true;
     }
 
+    /**
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function validatePhoneNumber(): bool
     {
         $address = $this->checkoutSession->getQuote()->getShippingAddress();
 
-        return substr($address->getTelephone(), 0, 2 ) === "39";
+        return (bool)preg_match('(^(\(?(((\+)|00)39)?\)?(3)(\d{8,9}))$)', $address->getTelephone());
     }
 }
