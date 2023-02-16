@@ -3,36 +3,59 @@
 namespace InPost\Shipment\Service\Api;
 
 use InPost\Shipment\Api\Data\CreateShipmentRequest;
+use InPost\Shipment\Config\ConfigProvider;
 use InPost\Shipment\Service\Http\ClientFactory;
+use InPost\Shipment\Service\Http\HttpClientException;
 
 class CreateShipmentService
 {
     private ClientFactory $httpClientFactory;
+    private ConfigProvider $configProvider;
 
     /**
      * @param ClientFactory $httpClient
+     * @param ConfigProvider $configProvider
      */
     public function __construct(
-        \InPost\Shipment\Service\Http\ClientFactory $httpClient
+        ClientFactory $httpClient,
+        ConfigProvider $configProvider
     ) {
         $this->httpClientFactory = $httpClient;
+        $this->configProvider = $configProvider;
     }
+
+    /**
+     * @param CreateShipmentRequest $request
+     * @return mixed
+     * @throws \InPost\Shipment\Service\Http\HttpClientException
+     */
     public function execute(CreateShipmentRequest $request)
     {
-        $client = $this->httpClientFactory->create();
+        try {
+            $client = $this->httpClientFactory->create();
 
-        $data = $this->generateRequestData($request);
+            $apiKey = $this->configProvider->getApiKey();
+            $merchantId = $this->configProvider->getMerchantId();
 
-        $client->setAuthToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzdGFnZS1zaGlweC1hcGktaXQuZWFzeXBhY2syNC5uZXQiLCJzdWIiOiJzdGFnZS1zaGlweC1hcGktaXQuZWFzeXBhY2syNC5uZXQiLCJleHAiOjE2NzE3OTQ4OTEsImlhdCI6MTY3MTc5NDg5MSwianRpIjoiYjJmYzc4YTUtMzk2Ny00YmI4LWEyNjItMDY0NDNiMzI1MjgwIn0.-rIQG99AqNfmybLQ3qGQTJKd-gogQcV350aIz2hd7SCT6uUNUYqqxIux0kr7mAGGQdaxu5ADLlEKkDGCjyVwtg');
+            $data = $this->generateRequestData($request);
+            $client->setAuthToken($apiKey);
 
-        $response = $client->post(
-            'https://stage-api-shipx-it.easypack24.net/v1/organizations/116/shipments',
-            json_encode($data)
-        );
+            $response = $client->post(
+                "https://stage-api-shipx-it.easypack24.net/v1/organizations/{$merchantId}/shipments",
+                json_encode($data)
+            );
+        } catch (HttpClientException $exception) {
+            // TODO: Add logging and error handling in case of response not 200
+            throw $exception;
+        }
 
         return json_decode($response->getBody()->getContents(), true);
     }
 
+    /**
+     * @param CreateShipmentRequest $request
+     * @return array
+     */
     private function generateRequestData(CreateShipmentRequest $request) : array
     {
         $requestData = $request->getData();

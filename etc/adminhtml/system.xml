@@ -10,7 +10,7 @@
             <group id="inpost" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1"
                    showInStore="1">
                 <label>InPost Shipping</label>
-                <group id="general" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="general" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>General</label>
                     <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
                            showInStore="1">
@@ -72,7 +72,7 @@
                     </field>
                 </group>
 
-                <group id="credentials" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="credentials" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credentials</label>
                     <field id="merchant_id" translate="label" type="text" sortOrder="1" showInDefault="1"
                            showInWebsite="1" showInStore="1">
@@ -84,11 +84,11 @@
                     </field>
                 </group>
 
-                <group id="pdfconfig" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="pdfconfig" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>PDF</label>
                 </group>
 
-                <group id="delivery_options" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="delivery_options" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Delivery options</label>
                     <field id="max_item_weight" translate="label" type="text" sortOrder="290" showInDefault="1"
                            showInWebsite="1" showInStore="1">
@@ -108,7 +108,7 @@
                     </field>
                 </group>
 
-                <group id="widget" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="widget" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Widget settings</label>
                     <field id="map_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
                            showInStore="1">

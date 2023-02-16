@@ -2,6 +2,7 @@
     <menu>
         <add id="InPost_Shipment::print_inpost_labels"
              title="Print Inpost Labels"
+             translate="title"
              module="InPost_Shipment"
              sortOrder="100"
              resource="Magento_Sales::sales_order"/>

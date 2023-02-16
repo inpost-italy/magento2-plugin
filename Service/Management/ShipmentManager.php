@@ -6,6 +6,7 @@ use InPost\Shipment\Carrier\Inpost;
 use InPost\Shipment\Service\Api\CreateShipmentService;
 use InPost\Shipment\Service\Builder\ShipmentRequestBuilder;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\ShipmentRepository;
@@ -59,9 +60,7 @@ class ShipmentManager
             'first_name' => $order->getCustomerFirstname(),
             'last_name' => $order->getCustomerLastname(),
             'email' => $order->getCustomerEmail(),
-            // TODO: Remove hardcoded telephone
-            'phone' => "500355111",
-//            'phone' => $address->getTelephone(),
+            'phone' => $address->getTelephone(),
             'address' => [
                 'city' => $address->getCity(),
                 'post_code' => $address->getPostcode(),
@@ -78,19 +77,34 @@ class ShipmentManager
         $this->builder->setService('inpost_locker_standard');
         $this->builder->setCustomAttributes([
             'target_point' => $address->getInpostPointId()
-//            'target_point' => 'ITARC23379'
         ]);
 
 
         $request = $this->builder->build();
         $shipmentCreationResponse = $this->createShipmentService->execute($request);
 
-        $this->addTrack(
-            $shipment,
-            $shipmentCreationResponse['service'],
-            $shipmentCreationResponse['id']
-        );
-        $this->addInpostShipmentId($shipment, $shipmentCreationResponse['id']);
+        $this->addInpostShipmentInfo($shipment, $shipmentCreationResponse);
+    }
+
+    /**
+     * @param Shipment $shipment
+     * @param array $shipmentInfo
+     * @return ShipmentInterface
+     * @throws CouldNotSaveException
+     */
+    public function addInpostShipmentInfo(Shipment $shipment, array $shipmentInfo): ShipmentInterface
+    {
+        $trackData = [
+            'carrier_code' => Inpost::CARRIER_CODE,
+            'title' => $shipmentInfo['service'],
+            'number' => $shipmentInfo['tracking_number'],
+        ];
+
+        $track = $this->trackFactory->create()->addData($trackData);
+        $shipment->addTrack($track);
+        $shipment->setData('inpost_shipment_id', $shipmentInfo['id']);
+
+        $this->shipmentRepository->save($shipment);
     }
 
     /**

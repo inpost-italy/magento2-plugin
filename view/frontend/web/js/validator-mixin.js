@@ -11,7 +11,7 @@ define([
             if((value.match(rule))){
                 return true;
             }
-        }, $.mage.__("Please enter a valid italian phone number."));
+        }, $.mage.__("Please enter valid Italian phone number."));
 
         return validator;
     };

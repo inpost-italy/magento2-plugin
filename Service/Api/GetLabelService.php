@@ -49,8 +49,7 @@ class GetLabelService
     public function getLabel(ShipmentInterface $shipment): array
     {
         // TODO: Remove hardcoded ID
-        $inpostShipmentId = 631092;
-//         $inpostShipmentId = $shipment->getInpostShipmentId();
+        $inpostShipmentId = $shipment->getInpostShipmentId();
 
         if (!$inpostShipmentId) {
             $message = __('Shipment does not contain Inpost Shipment ID.');
@@ -113,7 +112,7 @@ class GetLabelService
         $zipPath = $tmpDirectory . $zipName;
 
         if ($zip->open($zipPath, \ZipArchive::CREATE) !== true) {
-            $message = __('Error creating ZIP archive');
+            $message = __('Error during creating ZIP archive.');
             throw new \Exception($message->__toString());
         }
 
