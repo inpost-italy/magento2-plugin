@@ -1,12 +1,14 @@
 define([
         'uiComponent',
         'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/shipping-rate-registry',
         'jquery',
         'knockout'
     ],
     function (
         Component,
         quote,
+        rateReg,
         $,
         ko
     ) {
@@ -82,6 +84,14 @@ define([
                         event.preventDefault();
                         return false;
                     }
+                });
+
+                $(document).on('change', '#co-shipping-form input[name="telephone"]', function() {
+                    let address = quote.shippingAddress();
+                    address.telephone = $(this).val();
+                    rateReg.set(address.getKey(), null);
+                    rateReg.set(address.getCacheKey(), null);
+                    quote.shippingAddress(address);
                 });
 
                 return this.widget;

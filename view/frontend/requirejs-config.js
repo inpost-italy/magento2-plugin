@@ -11,9 +11,6 @@ var config = {
             'Magento_Checkout/js/action/select-shipping-method': {
                 'InPost_Shipment/js/action/select-shipping-method-mixin': true
             },
-            // 'Magento_Ui/js/lib/validation/validator': {
-            //     'InPost_Shipment/js/validator-mixin': true
-            // }
         }
     }
 };

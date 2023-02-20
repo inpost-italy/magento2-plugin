@@ -329,6 +329,6 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     {
         $address = $this->checkoutSession->getQuote()->getShippingAddress();
 
-        return (bool)preg_match('(^(\(?(((\+)|00)39)?\)?(3)(\d{8,9}))$)', $address->getTelephone());
+        return (bool)preg_match('(^(\(?(((\+)|00)39)?\)?(3)(\d{8,9}))$)', (string)$address->getTelephone());
     }
 }
