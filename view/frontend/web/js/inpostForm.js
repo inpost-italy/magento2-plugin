@@ -2,6 +2,7 @@ define([
         'uiComponent',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/shipping-rate-registry',
+        'Magento_Checkout/js/checkout-data',
         'jquery',
         'knockout'
     ],
@@ -9,6 +10,7 @@ define([
         Component,
         quote,
         rateReg,
+        checkoutData,
         $,
         ko
     ) {
@@ -92,6 +94,14 @@ define([
                     rateReg.set(address.getKey(), null);
                     rateReg.set(address.getCacheKey(), null);
                     quote.shippingAddress(address);
+                });
+
+                $('document').ready(function () {
+                    setTimeout(function() {
+                        if (checkoutData.getSelectedShippingRate() === 'inpost_inpost') {
+                            $('#inpost-extra-info').show();
+                        }
+                    }, 3000);
                 });
 
                 return this.widget;
