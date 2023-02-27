@@ -3,6 +3,7 @@
 namespace InPost\Shipment\Service\Builder;
 
 use Magento\Framework\DataObjectFactory;
+use Magento\Sales\Model\Order;
 
 class ShipmentRequestBuilder
 {
@@ -26,6 +27,30 @@ class ShipmentRequestBuilder
     {
        $this->data->setReceiver($data);
     }
+
+    public function setOrder(Order $order)
+    {
+        $address = $order->getShippingAddress();
+        $this->setReceiver([
+            'name'          => "{$order->getCustomerFirstname()} {$order->getCustomerLastname()}",
+            'first_name'    => $order->getCustomerFirstname(),
+            'last_name'     => $order->getCustomerLastname(),
+            'email'         => $order->getCustomerEmail(),
+            'phone'         => $address->getTelephone(),
+            'address'       => [
+                'city'      => $address->getCity(),
+                'post_code' => $address->getPostcode(),
+                'street'    => $address->getStreet()[0],
+                // @TODO FIX
+                'building_number' => '1',
+            ],
+        ]);
+
+        $this->setCustomAttributes([
+            'target_point' => $address->getInpostPointId()
+        ]);
+    }
+
 
     public function setSender(array $data)
     {
@@ -55,6 +80,4 @@ class ShipmentRequestBuilder
     {
         return $this->createShipmentRequestFactory->create(['data' => $this->data->toArray()]);
     }
-
-
 }

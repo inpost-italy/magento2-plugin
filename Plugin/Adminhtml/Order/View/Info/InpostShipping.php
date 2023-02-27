@@ -47,11 +47,13 @@ class InpostShipping
         $order = $subject->getOrder();
 
         // If we don't have an Inpost shipping method
-        if (!strpos($order->getShippingMethod(), Inpost::CARRIER_CODE) == false) {
+        if (strpos($order->getShippingMethod(), Inpost::CARRIER_CODE) === false) {
             return $result;
         }
+
         
         if (!$pointId = $order->getShippingAddress()->getInpostPointId()) {
+            echo 1;exit;
             return $result;
         }
 
@@ -69,7 +71,6 @@ class InpostShipping
 
 
         return $result;
-
     }
 
     private function showCreateShipment(string $pointInfo)
@@ -160,10 +161,10 @@ class InpostShipping
         foreach ($getShipmentsCollection as $shipment) {
             foreach ($shipment->getTracks() as $track) {
                 try {
-                    $inpostShipment = $this->getShipmentService->getShipment($track->getTrackNumber());
+                    $inpostShipment = $this->getShipmentService->getShipmentByTrackingId($track->getTrackNumber());
                     $inpostShipment = new DataObject($inpostShipment['items'][0]);
-
-                    $shipmentInformation .= "<i>Shipment ID:</i> <b>{$inpostShipment->getId()}</b><br>
+                    $shipmentInformation .= "<i>Tracking ID:</i> <b>{$track->getTrackNumber()}</b><br>
+            
             <i>Status: </i> <b>{$inpostShipment->getStatus()}</b><br>
             <i>Service: </i> {$inpostShipment->getService()}<br>
             <i>Created: </i> {$inpostShipment->getCreatedAt()}<br>

@@ -5,6 +5,7 @@ namespace InPost\Shipment\Service\Http;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 use Laminas\Http\Request;
+use Psr\Http\Message\ResponseInterface;
 
 class Client
 {
@@ -21,9 +22,13 @@ class Client
     }
 
     /**
+     * @param $path
+     * @param $params
+     *
+     * @return ResponseInterface
      * @throws HttpClientException
      */
-    public function get($path, $params) : \Psr\Http\Message\ResponseInterface
+    public function get($path, $params = []) : \Psr\Http\Message\ResponseInterface
     {
         $client = new GuzzleClient;
         $endpoint = $path . '?' . http_build_query($params);

@@ -13,6 +13,11 @@ class ConfigProvider
     const XML_PATH_INPOST_CREDENTIALS_MERCHANT_ID = 'carriers/inpost/credentials/merchant_id';
     const XML_PATH_INPOST_CREDENTIALS_API_KEY = 'carriers/inpost/credentials/api_key';
 
+    const URL_SHIPX_STAGING = 'https://stage-api-shipx-it.easypack24.net';
+
+    const URL_SHIPX_PRODUCTION = 'https://api-shipx-it.easypack24.net';
+
+
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
     protected $sandboxApiUrl = "https://stage-api-it-points-new.easypack24.net";
@@ -40,6 +45,11 @@ class ConfigProvider
     public function getApiBaseUrl(): string
     {
         return $this->isDebugModeEnabled() ? $this->sandboxApiUrl : $this->productionApiUrl;
+    }
+
+    public function getShipXBaseUrl(): string
+    {
+        return $this->isDebugModeEnabled() ? self::URL_SHIPX_STAGING : self::URL_SHIPX_PRODUCTION;
     }
 
     /**

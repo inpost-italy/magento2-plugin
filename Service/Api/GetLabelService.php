@@ -35,9 +35,6 @@ class GetLabelService
         $this->filesystem = $filesystem;
     }
 
-    /** @var string TODO config */
-    private const API_BASE_URL = 'https://stage-api-shipx-it.easypack24.net/';
-
     /**
      * Return array with file path to Inpost Shipping PDF Label
      *
@@ -68,7 +65,7 @@ class GetLabelService
         $client->setAuthToken($apiKey);
 
         $response = $client->get(
-            self::API_BASE_URL . "v1/shipments/{$inpostShipmentId}/label",
+            $this->configProvider->getShipXBaseUrl() . "/v1/shipments/{$inpostShipmentId}/label",
             []
         );
 

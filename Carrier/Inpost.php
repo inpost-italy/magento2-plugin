@@ -5,6 +5,7 @@ namespace InPost\Shipment\Carrier;
 
 use InPost\Shipment\Api\Data\PointsServiceRequestFactory;
 use InPost\Shipment\Config\ConfigProvider;
+use InPost\Shipment\Service\Api\ApiServiceProvider;
 use InPost\Shipment\Service\Api\PointsApiService;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -52,6 +53,8 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     /** @var ConfigProvider */
     private $configProvider;
 
+    private ApiServiceProvider $apiServiceProvider;
+
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param ErrorFactory $rateErrorFactory
@@ -71,7 +74,7 @@ class Inpost extends AbstractCarrier implements CarrierInterface
         LoggerInterface $logger,
         ResultFactory $rateResultFactory,
         MethodFactory $rateMethodFactory,
-        PointsApiService $pointsApiService,
+        ApiServiceProvider $apiServiceProvider,
         PointsServiceRequestFactory $pointsServiceRequestFactory,
         Session $checkoutSession,
         CollectionFactory $categoryCollectionFactory,
@@ -85,7 +88,7 @@ class Inpost extends AbstractCarrier implements CarrierInterface
         $this->configProvider = $configProvider;
 
         parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
-        $this->pointsApiService = $pointsApiService;
+        $this->apiServiceProvider = $apiServiceProvider;
         $this->pointsServiceRequestFactory = $pointsServiceRequestFactory;
     }
 
@@ -177,6 +180,13 @@ class Inpost extends AbstractCarrier implements CarrierInterface
         return $result;
     }
 
+    public function getTrackingInfo($trackId)
+    {
+        $trackingApi = $this->apiServiceProvider->getTrackingService();
+
+        return $trackingApi->getTracking($trackId);
+    }
+
     /**
      * @param RateRequest $request
      *
@@ -209,7 +219,8 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     {
         $apiPointsRequest = $this->pointsServiceRequestFactory->create();
         $apiPointsRequest->setName($pointId);
-        $points = $this->pointsApiService->getPoints($apiPointsRequest);
+        $pointsService = $this->apiServiceProvider->getPointsApiService();
+        $points = $pointsService->getPoints($apiPointsRequest);
 
         return !$points->isEmpty() ? $points->getFirstItem()->getAddressInfo() : null;
     }

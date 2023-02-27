@@ -3,6 +3,10 @@
 namespace InPost\Shipment\Plugin\Adminhtml\Order\Shipping;
 
 use InPost\Shipment\Service\Builder\ShipmentRequestBuilder;
+use InPost\Shipment\Service\Management\ShipmentManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\OrderRepository;
 
 class CreateInpostShipping
@@ -12,32 +16,55 @@ class CreateInpostShipping
      */
     private $orderRepository;
 
-    private \InPost\Shipment\Service\Management\ShipmentManager $createShipmentService;
+    private ShipmentManager $createShipmentService;
 
     public function __construct(
         OrderRepository $orderRepository,
-        \InPost\Shipment\Service\Management\ShipmentManager $createShipmentService
+        ShipmentManager $createShipmentService
     ) {
         $this->orderRepository = $orderRepository;
         $this->createShipmentService = $createShipmentService;
     }
 
     public function aroundExecute(
-        \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save $saveShipment,
+        \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save $saveShipmentAction,
         callable $proceed
     ) {
-        $request = $saveShipment->getRequest();
-        $packageOption = $request->getParam('inpost')['package_type'] ?? null;
-
-        $result = $proceed();
-        if (! $packageOption) {
-            return $result;
+        $request = $saveShipmentAction->getRequest();
+        $orderId = $request->getParam('order_id');
+        if (empty($orderId)) {
+            throw new \Exception("Unable to create a shiopment. Order ID is missing");
         }
 
-        $order = $this->orderRepository->get($request->getParam('order_id'));
-        $shipment = $order->getShipmentsCollection()->getLastItem();
-        $this->createShipmentService->createShipment($shipment, $packageOption);
+        $packageOption = $request->getParam('inpost')['package_type'] ?? null;
+        if (empty($packageOption)) {
+            throw new \Exception("Unable to create a shipment. An package options is missing");
+        }
+
+        $result = $proceed();
+        try {
+            $this->createShipmentService->createShipment(
+                $this->getCreatedShipment($orderId),
+                $packageOption
+            );
+        } catch (\Exception $e) {
+            throw new \Exception("Unable to create InPost shipment: {$e->getMessage()}");
+        }
 
         return $result;
+    }
+
+    /**
+     * @param $orderId
+     *
+     * @return Shipment
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    private function getCreatedShipment($orderId): Shipment
+    {
+        $order = $this->orderRepository->get($orderId);
+
+        return $order->getShipmentsCollection()->getLastItem();
     }
 }

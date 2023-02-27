@@ -41,7 +41,7 @@ class CreateShipmentService
             $client->setAuthToken($apiKey);
 
             $response = $client->post(
-                "https://stage-api-shipx-it.easypack24.net/v1/organizations/{$merchantId}/shipments",
+                "{$this->configProvider->getShipXBaseUrl()}/v1/organizations/{$merchantId}/shipments",
                 json_encode($data)
             );
         } catch (HttpClientException $exception) {

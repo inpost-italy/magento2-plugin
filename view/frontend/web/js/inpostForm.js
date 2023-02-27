@@ -27,9 +27,9 @@ define([
                 window.easyPackAsyncInit = function () {
                     easyPack.init({
                         defaultLocale: 'it',
-                        apiEndpoint: 'https://api-it-points.easypack24.net/v1/',
-                        mapType: config.map_type,
-                        searchType: config.search_type,
+                        apiEndpoint: config.pointsApiUrl,
+                        mapType: config.mapType,
+                        searchType: config.searchType,
                         points: {
                             types: ['pop', 'parcel_locker'],
                             allowedToolTips: ['pok', 'pop'],

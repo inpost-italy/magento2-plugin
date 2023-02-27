@@ -2,12 +2,15 @@
 
 namespace InPost\Shipment\Service\Management;
 
+use InPost\Shipment\Api\Data\Shipment;
 use InPost\Shipment\Carrier\Inpost;
 use InPost\Shipment\Service\Api\CreateShipmentService;
+use InPost\Shipment\Service\Api\GetShipmentService;
 use InPost\Shipment\Service\Builder\ShipmentRequestBuilder;
+use InPost\Shipment\Service\Http\HttpClientException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Sales\Api\Data\ShipmentInterface;
-use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\ShipmentRepository;
 
@@ -33,9 +36,12 @@ class ShipmentManager
      */
     private $shipmentRepository;
 
+    private GetShipmentService $getShipmentService;
+
     public function __construct(
         ShipmentRequestBuilder $builder,
         CreateShipmentService $createShipmentService,
+        GetShipmentService $getShipmentService,
         TrackFactory $trackFactory,
         ShipmentRepository $shipmentRepository
     ) {
@@ -43,95 +49,89 @@ class ShipmentManager
         $this->createShipmentService = $createShipmentService;
         $this->trackFactory = $trackFactory;
         $this->shipmentRepository = $shipmentRepository;
+        $this->getShipmentService = $getShipmentService;
     }
 
     /**
-     * @param Shipment $shipment
+     * @param OrderShipment $shipment
+     * @param $packageOption
      *
      * @return void
+     * @throws HttpClientException
      * @throws \Exception
      */
-    public function createShipment(Shipment $shipment, $packageOption)
+    public function createShipment(OrderShipment $shipment, $packageOption)
     {
         $order = $shipment->getOrder();
-        $address = $order->getShippingAddress();
+        $builder = $this->setupBuilder($order, $packageOption);
 
-        $this->builder->setReceiver([
-            'first_name' => $order->getCustomerFirstname(),
-            'last_name' => $order->getCustomerLastname(),
-            'email' => $order->getCustomerEmail(),
-            'phone' => $address->getTelephone(),
-            'address' => [
-                'city' => $address->getCity(),
-                'post_code' => $address->getPostcode(),
-                'street' => $address->getStreet()[0],
-                // @TODO FIX
-                'building_number' => '1',
-            ],
-        ]);
+        // Create shipment in ShipX system
+        $createShipmentResult = $this->createShipmentService->execute($builder->build());
 
-        $this->builder->setParcels([
-            'template' => $packageOption
-        ]);
+        // Sleep for 1 second to make sure that the shipment is created in ShipX system
+        sleep(1);
 
-        $this->builder->setService('inpost_locker_standard');
-        $this->builder->setCustomAttributes([
-            'target_point' => $address->getInpostPointId()
-        ]);
+        // Get shipment from ShipX system
+        $inpostShipmentResponse = $this->getShipmentService->getShipmentById($createShipmentResult['id']);
+        if ($inpostShipmentResponse->isEmpty()) {
+            throw new \Exception("Unable to create InPost shipment. Created shipment is not found.");
+        }
 
+        $inpostShipment = $inpostShipmentResponse->getFirstItem();
+        $trackingNumber = $inpostShipment->getTrackingNumber();
+        if (!$trackingNumber) {
+            throw new \Exception("No inpost tracking number returned");
+        }
 
-        $request = $this->builder->build();
-        $shipmentCreationResponse = $this->createShipmentService->execute($request);
-
-        $this->addInpostShipmentInfo($shipment, $shipmentCreationResponse);
+        $this->addTrack($shipment, $inpostShipment);
+        $this->addTrackingNumberToOrderShipment($shipment, $trackingNumber);
     }
 
     /**
-     * @param Shipment $shipment
-     * @param array $shipmentInfo
-     * @return ShipmentInterface
+     * @param Order $order
+     * @param $packageOption
+     *
+     * @return ShipmentRequestBuilder
+     */
+    private function setupBuilder(Order $order, $packageOption) : ShipmentRequestBuilder
+    {
+        $builder = $this->builder;
+        $builder->setOrder($order);
+
+        $builder->setParcels(['template' => $packageOption]);
+        $builder->setService('inpost_locker_standard');
+
+        return $builder;
+    }
+
+    /**
+     * @param OrderShipment $shipment
+     * @param string $trackingNumber
+     *
+     * @return void
      * @throws CouldNotSaveException
      */
-    public function addInpostShipmentInfo(Shipment $shipment, array $shipmentInfo): ShipmentInterface
+    private function addTrackingNumberToOrderShipment(OrderShipment $shipment, string $trackingNumber)
+    {
+        $shipment->setData('inpost_shipment_id', $trackingNumber);
+        $this->shipmentRepository->save($shipment);
+    }
+
+    /**
+     * @param OrderShipment $shipment
+     * @param Shipment $inpostShipment
+     *
+     * @return void
+     */
+    private function addTrack(OrderShipment $shipment, Shipment $inpostShipment)
     {
         $trackData = [
-            'carrier_code' => Inpost::CARRIER_CODE,
-            'title' => $shipmentInfo['service'],
-            'number' => $shipmentInfo['tracking_number'],
+            'carrier_code'  => Inpost::CARRIER_CODE,
+            'title'         => $inpostShipment->getService(),
+            'number'        => $inpostShipment->getTrackingNumber()
         ];
 
         $track = $this->trackFactory->create()->addData($trackData);
         $shipment->addTrack($track);
-        $shipment->setData('inpost_shipment_id', $shipmentInfo['id']);
-
-        $this->shipmentRepository->save($shipment);
-    }
-
-    /**
-     * @param Shipment $shipment
-     * @param $service
-     * @param $trackId
-     *
-     * @return void
-     * @throws CouldNotSaveException
-     */
-    private function addTrack(Shipment $shipment, $service, $trackId)
-    {
-        $data = array(
-            'carrier_code' => Inpost::CARRIER_CODE,
-            'title' => $service,
-            'number' => $trackId,
-        );
-
-        $track = $this->trackFactory->create()->addData($data);
-        $shipment->addTrack($track);
-
-        $this->shipmentRepository->save($shipment);
-    }
-
-    private function addInpostShipmentId(Shipment $shipment, string $inpostShipmentId)
-    {
-        $shipment->setData('inpost_shipment_id', $inpostShipmentId);
-        $this->shipmentRepository->save($shipment);
     }
 }
