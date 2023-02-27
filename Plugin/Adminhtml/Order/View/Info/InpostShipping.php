@@ -53,7 +53,6 @@ class InpostShipping
 
         
         if (!$pointId = $order->getShippingAddress()->getInpostPointId()) {
-            echo 1;exit;
             return $result;
         }
 
