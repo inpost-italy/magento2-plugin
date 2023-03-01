@@ -4,6 +4,7 @@ namespace InPost\Shipment\Plugin\Adminhtml\Order\Shipping;
 
 use InPost\Shipment\Service\Builder\ShipmentRequestBuilder;
 use InPost\Shipment\Service\Management\ShipmentManager;
+use InPost\Shipment\Service\Order\ShippingStatusAction;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order\Shipment;
@@ -18,18 +19,29 @@ class CreateInpostShipping
 
     private ShipmentManager $createShipmentService;
 
+    private ShippingStatusAction $shippingStatusAction;
+
+    /**
+     * @param OrderRepository $orderRepository
+     * @param ShipmentManager $createShipmentService
+     * @param ShippingStatusAction $shippingStatusAction
+     */
     public function __construct(
-        OrderRepository $orderRepository,
-        ShipmentManager $createShipmentService
-    ) {
+        OrderRepository                                     $orderRepository,
+        ShipmentManager                                     $createShipmentService,
+        \InPost\Shipment\Service\Order\ShippingStatusAction $shippingStatusAction
+    )
+    {
         $this->orderRepository = $orderRepository;
         $this->createShipmentService = $createShipmentService;
+        $this->shippingStatusAction = $shippingStatusAction;
     }
 
     public function aroundExecute(
         \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save $saveShipmentAction,
-        callable $proceed
-    ) {
+        callable                                                   $proceed
+    )
+    {
         $request = $saveShipmentAction->getRequest();
         $orderId = $request->getParam('order_id');
         if (empty($orderId)) {
@@ -47,6 +59,7 @@ class CreateInpostShipping
                 $this->getCreatedShipment($orderId),
                 $packageOption
             );
+            $this->shippingStatusAction->processOrder($orderId);
         } catch (\Exception $e) {
             throw new \Exception("Unable to create InPost shipment: {$e->getMessage()}");
         }

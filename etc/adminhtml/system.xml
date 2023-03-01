@@ -18,8 +18,7 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
 
-                    <field id="debug" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
-                           showInStore="1">
+                    <field id="debug" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sandbox mode</label>
                         <depends>
                             <field id="active">1</field>
@@ -119,6 +118,20 @@
                            showInStore="1">
                         <label>Search type</label>
                         <source_model>InPost\Shipment\Config\Source\MapSources</source_model>
+                    </field>
+                </group>
+
+                <group id="return" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Returns</label>
+                    <field id="return_enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="return_url" translate="label" type="text" sortOrder="220" showInDefault="1" showInWebsite="1">
+                        <label>Return url</label>
+                        <depends>
+                            <field id="return_enable">1</field>
+                        </depends>
                     </field>
                 </group>
             </group>
