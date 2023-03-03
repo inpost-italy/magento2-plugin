@@ -38,6 +38,7 @@ define([
                             functions: []
                         },
                         map: {
+                            googleKey: config.gMapsApiKey,
                             initialTypes: ['parcel_locker']
                         }
                     });

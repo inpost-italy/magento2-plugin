@@ -114,6 +114,16 @@
                         <label>Map type</label>
                         <source_model>InPost\Shipment\Config\Source\MapSources</source_model>
                     </field>
+
+                    <field id="gmaps_api_key" translate="label" type="text" sortOrder="1" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Google Maps API key</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="map_type">google</field>
+                        </depends>
+                    </field>
+
                     <field id="search_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
                            showInStore="1">
                         <label>Search type</label>
@@ -123,10 +133,12 @@
 
                 <group id="return" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Returns</label>
+
                     <field id="return_enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
                         <label>Enable</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
+
                     <field id="return_url" translate="label" type="text" sortOrder="220" showInDefault="1" showInWebsite="1">
                         <label>Return url</label>
                         <depends>

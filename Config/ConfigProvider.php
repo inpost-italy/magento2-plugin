@@ -17,7 +17,6 @@ class ConfigProvider
 
     const URL_SHIPX_PRODUCTION = 'https://api-shipx-it.easypack24.net';
 
-
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
     protected $sandboxApiUrl = "https://stage-api-it-points-new.easypack24.net";
@@ -74,5 +73,10 @@ class ConfigProvider
     public function getApiKey(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_INPOST_CREDENTIALS_API_KEY);
+    }
+
+    public function getReturnUrl(): ?string
+    {
+        return $this->scopeConfig->getValue('carriers/inpost/return/return_url');
     }
 }

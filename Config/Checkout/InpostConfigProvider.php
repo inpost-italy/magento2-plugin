@@ -29,12 +29,13 @@ class InpostConfigProvider implements ConfigProviderInterface
      */
     public function getConfig(): array
     {
-        $additionalVariables['inpost'] = [
-            'mapType' => $this->widgetConfigProvider->getMapType(),
-            'searchType' => $this->widgetConfigProvider->getSearchType(),
-            'pointsApiUrl' => $this->configProvider->getApiBaseUrl() . '/v1/',
+        return [
+            'inpost' => [
+                'mapType'       => $this->widgetConfigProvider->getMapType(),
+                'searchType'    => $this->widgetConfigProvider->getSearchType(),
+                'gMapsApiKey'   => $this->widgetConfigProvider->getGmapsApiKey(),
+                'pointsApiUrl'  => $this->configProvider->getApiBaseUrl() . '/v1/',
+            ]
         ];
-
-        return $additionalVariables;
     }
 }

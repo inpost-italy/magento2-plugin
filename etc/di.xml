@@ -24,4 +24,8 @@
         <plugin name="inpost_shipment_pdf_print_action"
                 type="InPost\Shipment\Plugin\Adminhtml\Order\Shipping\PdfPrintAction"/>
     </type>
+
+    <preference for="Magento\Sales\Block\Order\History" type="InPost\Shipment\Block\Sales\Order\History" />
+
+
 </config>

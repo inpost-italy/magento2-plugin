@@ -6,9 +6,9 @@
         <script src_type="url" src="https://geowidget.easypack24.net/js/sdk-for-javascript.js"/>
     </head>
     <body>
-        <referenceBlock name="sales.order.history">
+        <referenceBlock name="sales.order.history" >
             <action method="setTemplate">
-                <argument name="template" xsi:type="string">Inpost_Shipment::page/copyright.phtml</argument>
+                <argument name="template" xsi:type="string">InPost_Shipment::order/history.phtml</argument>
             </action>
         </referenceBlock>
     </body>
