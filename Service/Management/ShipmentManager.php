@@ -89,7 +89,7 @@ class ShipmentManager
         }
 
         $this->addTrack($shipment, $inpostShipment);
-        $this->addTrackingNumberToOrderShipment($shipment, $trackingNumber);
+        $this->addTrackingNumberToOrderShipment($shipment, (string)$inpostShipment->getId());
     }
 
     /**

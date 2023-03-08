@@ -81,7 +81,7 @@
                         <comment>E-mail to receive delivery updates.</comment>
                     </field>
 
-                    <field id="mobile_phone" translate="label comment" type="text" sortOrder="320" showInDefault="1"
+                    <field id="mobile_phone_number" translate="label comment" type="text" sortOrder="320" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <depends>
                             <field id="active">1</field>

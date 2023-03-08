@@ -54,11 +54,7 @@ class ShipmentRequestBuilder
 
     public function setSender(array $data)
     {
-        if (!$this->data->getData('sender')) {
-            $this->data->setData('sender', $this->objectFactory->create());
-        }
-        $sender = $this->data->getData('sender');
-        $sender->addData($data);
+        $this->data->setSender($data);
     }
 
     public function setParcels(array $data)
