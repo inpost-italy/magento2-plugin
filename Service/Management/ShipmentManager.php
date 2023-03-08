@@ -4,6 +4,7 @@ namespace InPost\Shipment\Service\Management;
 
 use InPost\Shipment\Api\Data\Shipment;
 use InPost\Shipment\Carrier\Inpost;
+use InPost\Shipment\Config\ConfigProvider;
 use InPost\Shipment\Service\Api\CreateShipmentService;
 use InPost\Shipment\Service\Api\GetShipmentService;
 use InPost\Shipment\Service\Builder\ShipmentRequestBuilder;
@@ -36,6 +37,8 @@ class ShipmentManager
      */
     private $shipmentRepository;
 
+    private ConfigProvider $configProvider;
+
     private GetShipmentService $getShipmentService;
 
     public function __construct(
@@ -43,13 +46,15 @@ class ShipmentManager
         CreateShipmentService $createShipmentService,
         GetShipmentService $getShipmentService,
         TrackFactory $trackFactory,
-        ShipmentRepository $shipmentRepository
+        ShipmentRepository $shipmentRepository,
+        ConfigProvider $configProvider
     ) {
         $this->builder = $builder;
         $this->createShipmentService = $createShipmentService;
         $this->trackFactory = $trackFactory;
         $this->shipmentRepository = $shipmentRepository;
         $this->getShipmentService = $getShipmentService;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -97,7 +102,11 @@ class ShipmentManager
     {
         $builder = $this->builder;
         $builder->setOrder($order);
-
+        $builder->setSender([
+            'company_name' => $this->configProvider->getCompanyName(),
+            'email' => $this->configProvider->getEmail(),
+            'phone' => $this->configProvider->getMobilePhoneNumber(),
+        ]);
         $builder->setParcels(['template' => $packageOption]);
         $builder->setService('inpost_locker_standard');
 

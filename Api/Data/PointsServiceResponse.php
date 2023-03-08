@@ -9,7 +9,7 @@ class PointsServiceResponse extends DataObject
 {
     public function getItemsCount() : int
     {
-        return $this->getCount();
+        return (int)$this->getCount();
     }
 
     public function getFirstItem() : PointData

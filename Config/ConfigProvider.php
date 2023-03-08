@@ -9,7 +9,11 @@ class ConfigProvider
 {
     const ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE = 'allow_inpost_delivery';
     const XML_PATH_INPOST_GENERAL_ACTIVE = 'carriers/inpost/general/active';
-    const XML_PATH_INPOST_GENERAL_DEBUG = 'carriers/inpost/general/debug';
+    const XML_PATH_INPOST_GENERAL_COMPANY_NAME = 'carriers/inpost/general/company_name';
+    const XML_PATH_INPOST_GENERAL_EMAIL = 'carriers/inpost/general/email';
+    const XML_PATH_INPOST_GENERAL_MOBILE_PHONE_NUMBER = 'carriers/inpost/general/mobile_phone_number';
+
+    const XML_PATH_INPOST_CREDENTIALS_DEBUG = 'carriers/inpost/credentials/debug';
     const XML_PATH_INPOST_CREDENTIALS_MERCHANT_ID = 'carriers/inpost/credentials/merchant_id';
     const XML_PATH_INPOST_CREDENTIALS_API_KEY = 'carriers/inpost/credentials/api_key';
 
@@ -52,11 +56,35 @@ class ConfigProvider
     }
 
     /**
+     * @return string|null
+     */
+    public function getCompanyName(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_COMPANY_NAME);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_EMAIL);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMobilePhoneNumber(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_MOBILE_PHONE_NUMBER);
+    }
+
+    /**
      * @return bool
      */
     public function isDebugModeEnabled(): bool
     {
-        return (bool)$this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_DEBUG);
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_INPOST_CREDENTIALS_DEBUG);
     }
 
     /**

@@ -18,14 +18,6 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
 
-                    <field id="debug" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Sandbox mode</label>
-                        <depends>
-                            <field id="active">1</field>
-                        </depends>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    </field>
-
                     <field id="price" translate="label" type="text" sortOrder="220" showInDefault="1" showInWebsite="1">
                         <label>Price</label>
                         <depends>
@@ -69,10 +61,47 @@
                         </depends>
                         <label>Sort Order</label>
                     </field>
+
+                    <field id="company_name" translate="label" type="text" sortOrder="300" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                        <label>Company Name</label>
+                    </field>
+
+                    <field id="email" translate="label" type="text" sortOrder="310" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                        <validate>required-entry validate-email</validate>
+                        <label>E-mail</label>
+                        <comment>E-mail to receive delivery updates.</comment>
+                    </field>
+
+                    <field id="mobile_phone" translate="label" type="text" sortOrder="320" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                        <label>Mobile Phone Number</label>
+                        <comment>Mobile phone number to receive delivery updates.</comment>
+                    </field>
                 </group>
 
                 <group id="credentials" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credentials</label>
+                    <field id="debug" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1"
+                           showInStore="1">
+                        <label>Sandbox mode</label>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
                     <field id="merchant_id" translate="label" type="text" sortOrder="1" showInDefault="1"
                            showInWebsite="1" showInStore="1">
                         <label>Merchant ID</label>
