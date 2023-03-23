@@ -1,0 +1,8 @@
+{
+    "version": "1.0.0",
+    "name": "inpost/magento2-shipment",
+    "description": "Magento 2 module for Inpost IT integration",
+    "type": "magento2-module",
+    "license": "MIT",
+    "require": {}
+}
