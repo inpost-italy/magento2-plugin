@@ -89,7 +89,7 @@
                         <depends>
                             <field id="active">1</field>
                         </depends>
-                        <validate>required-entry</validate>
+                        <validate>required-entry validate-italian-phone-number</validate>
                         <label>Mobile Phone Number</label>
                         <comment>Mobile phone number to receive delivery updates.</comment>
                     </field>
