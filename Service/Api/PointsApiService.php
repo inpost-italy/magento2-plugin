@@ -13,14 +13,24 @@ use InPost\Shipment\Service\Http\HttpClientException;
 
 class PointsApiService
 {
-    private ClientFactory $httpClientFactory;
+    /** @var ClientFactory */
+    private $httpClientFactory;
 
-    private PointDataFactory $pointDataFactory;
+    /** @var PointDataFactory */
+    private $pointDataFactory;
 
-    private PointsServiceResponseFactory $pointsServiceResponseFactory;
+    /** @var PointsServiceResponseFactory */
+    private $pointsServiceResponseFactory;
 
+    /** @var ConfigProvider */
     private $configProvider;
 
+    /**
+     * @param ClientFactory $httpClient
+     * @param PointDataFactory $pointDataFactory
+     * @param PointsServiceResponseFactory $pointsServiceResponseFactory
+     * @param ConfigProvider $configProvider
+     */
     public function __construct(
         ClientFactory $httpClient,
         PointDataFactory $pointDataFactory,
@@ -33,7 +43,7 @@ class PointsApiService
         $this->configProvider = $configProvider;
     }
 
-    public function getPoints(PointsServiceRequest $pointsServiceRequest) : PointsServiceResponse
+    public function getPoints(PointsServiceRequest $pointsServiceRequest): PointsServiceResponse
     {
         $client = $this->httpClientFactory->create();
         $params = $pointsServiceRequest->getData();

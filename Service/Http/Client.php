@@ -13,10 +13,9 @@ class Client
 
     /**
      * @param $token
-     *
      * @return void
      */
-    public function setAuthToken($token)
+    public function setAuthToken($token): void
     {
         $this->authToken = $token;
     }
@@ -28,7 +27,7 @@ class Client
      * @return ResponseInterface
      * @throws HttpClientException
      */
-    public function get($path, $params = []) : \Psr\Http\Message\ResponseInterface
+    public function get($path, $params = []): ResponseInterface
     {
         $client = new GuzzleClient;
         $endpoint = $path . '?' . http_build_query($params);
@@ -36,8 +35,9 @@ class Client
         try {
             $response = $client->get($endpoint, [
                 'headers' => [
-                    'Content-Type' => 'application/json', 'Accept' => 'application/json',
-                    'Authorization' =>  "Bearer {$this->authToken}"
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => "Bearer {$this->authToken}"
                 ]
             ]);
         } catch (GuzzleException $e) {
@@ -51,15 +51,16 @@ class Client
         return $response;
     }
 
-    public function post($path, $body) : \Psr\Http\Message\ResponseInterface
+    public function post($path, $body): ResponseInterface
     {
         $client = new GuzzleClient;
 
         try {
             $response = $client->post($path, [
                 'headers' => [
-                    'Content-Type' => 'application/json', 'Accept' => 'application/json',
-                    'Authorization' =>  "Bearer {$this->authToken}"
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => "Bearer {$this->authToken}"
                 ],
                 'body' => $body
             ]);

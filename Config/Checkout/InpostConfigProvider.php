@@ -8,9 +8,11 @@ use \Magento\Checkout\Model\ConfigProviderInterface;
 
 class InpostConfigProvider implements ConfigProviderInterface
 {
-    private WidgetConfigProvider $widgetConfigProvider;
+    /** @var WidgetConfigProvider  */
+    private $widgetConfigProvider;
 
-    private ConfigProvider $configProvider;
+    /** @var ConfigProvider  */
+    private $configProvider;
 
     /**
      * @param WidgetConfigProvider $widgetConfigProvider
@@ -18,8 +20,7 @@ class InpostConfigProvider implements ConfigProviderInterface
     public function __construct(
         WidgetConfigProvider $widgetConfigProvider,
         ConfigProvider $configProvider
-    )
-    {
+    ) {
         $this->widgetConfigProvider = $widgetConfigProvider;
         $this->configProvider = $configProvider;
     }
@@ -31,10 +32,10 @@ class InpostConfigProvider implements ConfigProviderInterface
     {
         return [
             'inpost' => [
-                'mapType'       => $this->widgetConfigProvider->getMapType(),
-                'searchType'    => $this->widgetConfigProvider->getSearchType(),
-                'gMapsApiKey'   => $this->widgetConfigProvider->getGmapsApiKey(),
-                'pointsApiUrl'  => $this->configProvider->getApiBaseUrl() . '/v1/',
+                'mapType' => $this->widgetConfigProvider->getMapType(),
+                'searchType' => $this->widgetConfigProvider->getSearchType(),
+                'gMapsApiKey' => $this->widgetConfigProvider->getGmapsApiKey(),
+                'pointsApiUrl' => $this->configProvider->getApiBaseUrl() . '/v1/',
             ]
         ];
     }

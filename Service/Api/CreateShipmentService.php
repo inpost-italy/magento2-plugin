@@ -9,8 +9,11 @@ use InPost\Shipment\Service\Http\HttpClientException;
 
 class CreateShipmentService
 {
-    private ClientFactory $httpClientFactory;
-    private ConfigProvider $configProvider;
+    /** @var ClientFactory */
+    private $httpClientFactory;
+
+    /** @var ConfigProvider */
+    private $configProvider;
 
     /**
      * @param ClientFactory $httpClient
@@ -56,7 +59,7 @@ class CreateShipmentService
      * @param CreateShipmentRequest $request
      * @return array
      */
-    private function generateRequestData(CreateShipmentRequest $request) : array
+    private function generateRequestData(CreateShipmentRequest $request): array
     {
         $requestData = $request->getData();
         $template = $requestData['parcels']['template'];

@@ -13,7 +13,8 @@ class WidgetConfigProvider
     const WIDGET_MAP_TYPE = 'carriers/inpost/widget/map_type';
 
 
-    private ScopeConfigInterface $scopeConfig;
+    /** @var ScopeConfigInterface */
+    private $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig

@@ -37,10 +37,20 @@ class ShipmentManager
      */
     private $shipmentRepository;
 
-    private ConfigProvider $configProvider;
+    /** @var ConfigProvider */
+    private $configProvider;
 
-    private GetShipmentService $getShipmentService;
+    /** @var GetShipmentService */
+    private $getShipmentService;
 
+    /**
+     * @param ShipmentRequestBuilder $builder
+     * @param CreateShipmentService $createShipmentService
+     * @param GetShipmentService $getShipmentService
+     * @param TrackFactory $trackFactory
+     * @param ShipmentRepository $shipmentRepository
+     * @param ConfigProvider $configProvider
+     */
     public function __construct(
         ShipmentRequestBuilder $builder,
         CreateShipmentService $createShipmentService,
@@ -98,7 +108,7 @@ class ShipmentManager
      *
      * @return ShipmentRequestBuilder
      */
-    private function setupBuilder(Order $order, $packageOption) : ShipmentRequestBuilder
+    private function setupBuilder(Order $order, $packageOption): ShipmentRequestBuilder
     {
         $builder = $this->builder;
         $builder->setOrder($order);
@@ -135,9 +145,9 @@ class ShipmentManager
     private function addTrack(OrderShipment $shipment, Shipment $inpostShipment)
     {
         $trackData = [
-            'carrier_code'  => Inpost::CARRIER_CODE,
-            'title'         => $inpostShipment->getService(),
-            'number'        => $inpostShipment->getTrackingNumber()
+            'carrier_code' => Inpost::CARRIER_CODE,
+            'title' => $inpostShipment->getService(),
+            'number' => $inpostShipment->getTrackingNumber()
         ];
 
         $track = $this->trackFactory->create()->addData($trackData);

@@ -2,22 +2,24 @@
 
 namespace InPost\Shipment\Controller\Webhook;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Json\Helper\Data;
 use Magento\Sales\Model\Order\ShipmentRepository;
 
-class Index extends \Magento\Framework\App\Action\Action
-    implements \Magento\Framework\App\Action\HttpPostActionInterface,
-    CsrfAwareActionInterface
+class Index extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
-    /**
-     * @var \Magento\Framework\Controller\ResultFactory
-     */
+    /** @var ResultFactory */
     private $pageFactory;
 
-    private ShipmentRepository $shipmentRepository;
+    /** @var ShipmentRepository */
+    private $shipmentRepository;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -29,7 +31,7 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->shipmentRepository = $shipmentRepository;
     }
 
-    public function createCsrfValidationException(RequestInterface $request): ? InvalidRequestException
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
     {
         return null;
     }
@@ -49,7 +51,7 @@ class Index extends \Magento\Framework\App\Action\Action
         }
 
         $json = file_get_contents('php://input');
-        $data = json_decode($json,true);
+        $data = json_decode($json, true);
 
         if ($this->getEvent($data) !== 'shipment_status_changed') {
             return;
@@ -70,7 +72,7 @@ class Index extends \Magento\Framework\App\Action\Action
         ];
 
         $this->getResponse()->representJson(
-            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+            $this->_objectManager->get(Data::class)->jsonEncode($result)
         );
     }
 

@@ -19,6 +19,7 @@ class PdfShipmentsMassAction
     /**
      * @param GetLabelService $labelService
      * @param ConfigProvider $configProvider
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         GetLabelService $labelService,

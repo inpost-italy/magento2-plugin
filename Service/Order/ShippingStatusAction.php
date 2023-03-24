@@ -11,8 +11,12 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class ShippingStatusAction
 {
 
-    private OrderRepositoryInterface $orderRepository;
+    /** @var OrderRepositoryInterface */
+    private $orderRepository;
 
+    /**
+     * @param OrderRepositoryInterface $orderRepository
+     */
     public function __construct(OrderRepositoryInterface $orderRepository)
     {
         $this->orderRepository = $orderRepository;

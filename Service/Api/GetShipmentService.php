@@ -2,24 +2,37 @@
 
 namespace InPost\Shipment\Service\Api;
 
+use InPost\Shipment\Api\Data\PointDataFactory;
+use InPost\Shipment\Api\Data\PointsServiceResponseFactory;
 use InPost\Shipment\Api\Data\ShipmentResponse;
 use InPost\Shipment\Config\ConfigProvider;
+use InPost\Shipment\Service\Http\ClientFactory;
 
 class GetShipmentService
 {
-    private \InPost\Shipment\Service\Http\ClientFactory $httpClientFactory;
+    /** @var ClientFactory */
+    private $httpClientFactory;
 
-    private \InPost\Shipment\Api\Data\PointDataFactory $pointDataFactory;
+    /** @var PointDataFactory */
+    private $pointDataFactory;
 
-    private \InPost\Shipment\Api\Data\PointsServiceResponseFactory $pointsServiceResponseFactory;
+    /** @var PointsServiceResponseFactory */
+    private $pointsServiceResponseFactory;
 
-    private ConfigProvider $config;
+    /** @var ConfigProvider */
+    private $config;
 
+    /**
+     * @param ClientFactory $httpClient
+     * @param PointDataFactory $pointDataFactory
+     * @param ConfigProvider $config
+     * @param PointsServiceResponseFactory $pointsServiceResponseFactory
+     */
     public function __construct(
-        \InPost\Shipment\Service\Http\ClientFactory $httpClient,
-        \InPost\Shipment\Api\Data\PointDataFactory $pointDataFactory,
+        ClientFactory $httpClient,
+        PointDataFactory $pointDataFactory,
         ConfigProvider $config,
-        \InPost\Shipment\Api\Data\PointsServiceResponseFactory $pointsServiceResponseFactory
+        PointsServiceResponseFactory $pointsServiceResponseFactory
     ) {
         $this->httpClientFactory = $httpClient;
         $this->pointDataFactory = $pointDataFactory;
@@ -27,15 +40,13 @@ class GetShipmentService
         $this->config = $config;
     }
 
-    /** @var string TODO config */
-
-    public function getShipmentById($shipmentId) : ShipmentResponse
+    public function getShipmentById($shipmentId): ShipmentResponse
     {
         $client = $this->httpClientFactory->create();
         $client->setAuthToken($this->config->getApiKey());
 
         $response = $client->get(
-             "{$this->config->getShipXBaseUrl()}/v1/organizations/{$this->config->getMerchantId()}/shipments",
+            "{$this->config->getShipXBaseUrl()}/v1/organizations/{$this->config->getMerchantId()}/shipments",
             ['id' => $shipmentId]
         );
         $data = json_decode($response->getBody()->getContents(), true);
@@ -43,18 +54,16 @@ class GetShipmentService
         return new ShipmentResponse($data);
     }
 
-    public function getShipmentByTrackingId($trackingId) : array
+    public function getShipmentByTrackingId($trackingId): array
     {
         $client = $this->httpClientFactory->create();
 
-        $client->setAuthToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzdGFnZS1zaGlweC1hcGktaXQuZWFzeXBhY2syNC5uZXQiLCJzdWIiOiJzdGFnZS1zaGlweC1hcGktaXQuZWFzeXBhY2syNC5uZXQiLCJleHAiOjE2NzE3OTQ4OTEsImlhdCI6MTY3MTc5NDg5MSwianRpIjoiYjJmYzc4YTUtMzk2Ny00YmI4LWEyNjItMDY0NDNiMzI1MjgwIn0.-rIQG99AqNfmybLQ3qGQTJKd-gogQcV350aIz2hd7SCT6uUNUYqqxIux0kr7mAGGQdaxu5ADLlEKkDGCjyVwtg');
+        $client->setAuthToken($this->config->getApiKey());
         $response = $client->get(
-            $this->config->getShipXBaseUrl() . "/v1/organizations/116/shipments",
+            $this->config->getShipXBaseUrl() . "/v1/organizations/{$this->config->getMerchantId()}/shipments",
             ['tracking_number' => $trackingId]
         );
 
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        return $data;
+        return json_decode($response->getBody()->getContents(), true);
     }
 }

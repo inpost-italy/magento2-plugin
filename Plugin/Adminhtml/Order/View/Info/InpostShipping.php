@@ -3,6 +3,7 @@
 namespace InPost\Shipment\Plugin\Adminhtml\Order\View\Info;
 
 use InPost\Shipment\Api\Data\PointsServiceRequestFactory;
+use InPost\Shipment\Service\Api\GetShipmentService;
 use Magento\Framework\DataObject;
 use \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
 use InPost\Shipment\Carrier\Inpost;
@@ -12,27 +13,29 @@ use Psr\Log\LoggerInterface;
 
 class InpostShipping
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var LoggerInterface */
     private $logger;
 
-    private \InPost\Shipment\Service\Api\PointsApiService $pointsApiService;
+    /** @var PointsApiService */
+    private $pointsApiService;
 
-    private \InPost\Shipment\Api\Data\PointsServiceRequestFactory $pointsServiceRequestFactory;
+    /** @var PointsServiceRequestFactory */
+    private $pointsServiceRequestFactory;
 
-    private \InPost\Shipment\Service\Api\GetShipmentService $getShipmentService;
+    /** @var GetShipmentService */
+    private $getShipmentService;
 
     /**
      * @param LoggerInterface $logger
      * @param PointsApiService $pointsApiService
      * @param PointsServiceRequestFactory $pointsServiceRequestFactory
+     * @param GetShipmentService $getShipmentService
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \InPost\Shipment\Service\Api\PointsApiService $pointsApiService,
-        \InPost\Shipment\Api\Data\PointsServiceRequestFactory $pointsServiceRequestFactory,
-        \InPost\Shipment\Service\Api\GetShipmentService $getShipmentService
+        PointsApiService $pointsApiService,
+        PointsServiceRequestFactory $pointsServiceRequestFactory,
+        GetShipmentService $getShipmentService
 
     ) {
         $this->logger = $logger;
@@ -42,6 +45,12 @@ class InpostShipping
     }
 
 
+    /**
+     * @param Info $subject
+     * @param $result
+     * @return mixed|string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function afterToHtml(Info $subject, $result)
     {
         $order = $subject->getOrder();
@@ -51,7 +60,7 @@ class InpostShipping
             return $result;
         }
 
-        
+
         if (!$pointId = $order->getShippingAddress()->getInpostPointId()) {
             return $result;
         }
@@ -72,22 +81,22 @@ class InpostShipping
         return $result;
     }
 
-    private function showCreateShipment(string $pointInfo)
+    private function showCreateShipment(string $pointInfo): string
     {
-        return'<div class="admin__page-section-item order-payment-method" >
+        return '<div class="admin__page-section-item order-payment-method" >
                                 <div class="admin__page-section-item-title" >
                     <span class="title">InPost Fullfilment</span>
                 <div class="admin__page-section-item-content" >
                       <i><h4>An Inpost shipment has not been created yet</h4></i>
                       Point information:<br>
-                      '. $pointInfo .'
+                      ' . $pointInfo . '
                 </div>
             </div>
             </div>
             ';
     }
 
-    private function shipmentCreateForm(string $addressInformation)
+    private function shipmentCreateForm(string $addressInformation): string
     {
         return '<div class="admin__page-section-item order-payment-method" >
                                 <div class="admin__page-section-item-title" >
@@ -115,7 +124,7 @@ class InpostShipping
                             </select>
         </td>
         <td class="col-title">
-            '. $addressInformation . '
+            ' . $addressInformation . '
         </td>   
         </tr></tbody>
         </table>
@@ -135,11 +144,15 @@ class InpostShipping
         $inpostPointRequest = $this->pointsServiceRequestFactory->create();
         $inpostPointRequest->setName($pointId);
         $points = $this->pointsApiService->getPoints($inpostPointRequest);
-        
+
         return $points->getItemsCount() ? $this->formatHtml($points->getFirstItem()) : 'No point information';
     }
 
-    private function formatHtml(\InPost\Shipment\Api\Data\PointData $pointData)
+    /**
+     * @param \InPost\Shipment\Api\Data\PointData $pointData
+     * @return string
+     */
+    private function formatHtml(\InPost\Shipment\Api\Data\PointData $pointData): string
     {
         $addressDetails = $pointData->getAddressDetails();
 
@@ -149,12 +162,22 @@ class InpostShipping
             ";
     }
 
-    private function hasHandle(\Magento\Sales\Block\Adminhtml\Order\View\Info $block, $handle)
+    /**
+     * @param Info $block
+     * @param $handle
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function hasHandle(Info $block, $handle): bool
     {
         return in_array($handle, $block->getLayout()->getUpdate()->getHandles());
     }
 
-    private function showShipmentTracking(ShipmentCollection $getShipmentsCollection)
+    /**
+     * @param ShipmentCollection $getShipmentsCollection
+     * @return string
+     */
+    private function showShipmentTracking(ShipmentCollection $getShipmentsCollection): string
     {
         $shipmentInformation = '';
         foreach ($getShipmentsCollection as $shipment) {
@@ -174,12 +197,12 @@ class InpostShipping
             }
         }
 
-        return'<div class="admin__page-section-item order-payment-method" >
+        return '<div class="admin__page-section-item order-payment-method" >
                                 <div class="admin__page-section-item-title" >
                     <span class="title">InPost Fullfilment</span>
                 <div class="admin__page-section-item-content" >
                       Point information:<br>
-                      '. $shipmentInformation .'
+                      ' . $shipmentInformation . '
                 </div>
             </div>
             </div>

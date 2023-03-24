@@ -43,9 +43,11 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     /** @var Session */
     private $checkoutSession;
 
-    private PointsApiService $pointsApiService;
 
-    private PointsServiceRequestFactory $pointsServiceRequestFactory;
+    private $pointsApiService;
+
+    /** @var PointsServiceRequestFactory */
+    private $pointsServiceRequestFactory;
 
     /** @var CollectionFactory */
     private $categoryCollectionFactory;
@@ -53,7 +55,8 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     /** @var ConfigProvider */
     private $configProvider;
 
-    private ApiServiceProvider $apiServiceProvider;
+    /** @var ApiServiceProvider */
+    private $apiServiceProvider;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -323,7 +326,7 @@ class Inpost extends AbstractCarrier implements CarrierInterface
                 continue;
             }
 
-            if (! $allowCategory) {
+            if (!$allowCategory) {
                 return false;
             }
         }

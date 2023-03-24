@@ -26,7 +26,8 @@ class TrackingData extends \Magento\Framework\DataObject
         return "https://inpost.it/trova-il-tuo-pacco?number={$this->getTracking()}";
     }
 
-    private function arrayToHtmlTableRecursive($arr) {
+    private function arrayToHtmlTableRecursive($arr)
+    {
         $str = "";
         foreach ($arr as $key => $val) {
             $str .= "$key: ";
@@ -41,6 +42,4 @@ class TrackingData extends \Magento\Framework\DataObject
 
         return $str;
     }
-
-
 }

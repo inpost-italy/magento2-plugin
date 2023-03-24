@@ -9,6 +9,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\OrderRepository;
+use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save;
 
 class CreateInpostShipping
 {
@@ -17,9 +18,11 @@ class CreateInpostShipping
      */
     private $orderRepository;
 
-    private ShipmentManager $createShipmentService;
+    /** @var ShipmentManager */
+    private $createShipmentService;
 
-    private ShippingStatusAction $shippingStatusAction;
+    /** @var ShippingStatusAction */
+    private $shippingStatusAction;
 
     /**
      * @param OrderRepository $orderRepository
@@ -27,21 +30,25 @@ class CreateInpostShipping
      * @param ShippingStatusAction $shippingStatusAction
      */
     public function __construct(
-        OrderRepository                                     $orderRepository,
-        ShipmentManager                                     $createShipmentService,
-        \InPost\Shipment\Service\Order\ShippingStatusAction $shippingStatusAction
-    )
-    {
+        OrderRepository $orderRepository,
+        ShipmentManager $createShipmentService,
+        ShippingStatusAction $shippingStatusAction
+    ) {
         $this->orderRepository = $orderRepository;
         $this->createShipmentService = $createShipmentService;
         $this->shippingStatusAction = $shippingStatusAction;
     }
 
+    /**
+     * @param Save $saveShipmentAction
+     * @param callable $proceed
+     * @return mixed
+     * @throws \Exception
+     */
     public function aroundExecute(
-        \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save $saveShipmentAction,
-        callable                                                   $proceed
-    )
-    {
+        Save $saveShipmentAction,
+        callable $proceed
+    ) {
         $request = $saveShipmentAction->getRequest();
         $orderId = $request->getParam('order_id');
         if (empty($orderId)) {

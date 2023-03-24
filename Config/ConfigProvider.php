@@ -37,7 +37,7 @@ class ConfigProvider
     /**
      * @return bool
      */
-    public function isActive():bool
+    public function isActive(): bool
     {
         return (bool)$this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_ACTIVE);
     }

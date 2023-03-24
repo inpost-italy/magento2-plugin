@@ -9,10 +9,16 @@ use InPost\Shipment\Service\Http\ClientFactory;
 
 class TrackingService
 {
-    private ClientFactory $httpClientFactory;
+    /** @var ClientFactory */
+    private $httpClientFactory;
 
-    private ConfigProvider $configProvider;
+    /** @var ConfigProvider */
+    private $configProvider;
 
+    /**
+     * @param ClientFactory $httpClient
+     * @param ConfigProvider $configProvider
+     */
     public function __construct(
         ClientFactory $httpClient,
         ConfigProvider $configProvider
@@ -27,7 +33,7 @@ class TrackingService
      * @return TrackingData
      * @throws \Exception
      */
-    public function getTracking($trackingNumber) : TrackingData
+    public function getTracking($trackingNumber): TrackingData
     {
         $client = $this->httpClientFactory->create();
 

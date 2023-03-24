@@ -25,7 +25,7 @@ class ShipmentResponse extends DataObject
         return $this->getItems()[0];
     }
 
-    public function isEmpty() : bool
+    public function isEmpty(): bool
     {
         return empty($this->getItems());
     }

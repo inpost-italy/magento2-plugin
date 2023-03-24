@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace InPost\Shipment\Api\Data;
 
+use Magento\Framework\ObjectManagerInterface;
+
 class PointsServiceRequestFactory
 {
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -22,10 +24,10 @@ class PointsServiceRequestFactory
     /**
      * Factory constructor
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = PointsServiceRequest::class)
+    public function __construct(ObjectManagerInterface $objectManager, $instanceName = PointsServiceRequest::class)
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
