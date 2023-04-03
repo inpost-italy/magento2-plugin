@@ -49,6 +49,7 @@ class Index extends Action implements HttpPostActionInterface, CsrfAwareActionIn
         if (!$this->getRequest()->isPost()) {
             throw new NotFoundException(__('Only POST allowed'));
         }
+        return;
 
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
@@ -61,7 +62,6 @@ class Index extends Action implements HttpPostActionInterface, CsrfAwareActionIn
 //            $this->shipmentRepository->get
         }
 
-        print_r($data);exit;
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $productIds = $this->getRequest()->getParam('product_ids');

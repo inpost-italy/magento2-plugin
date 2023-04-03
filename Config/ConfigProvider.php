@@ -7,7 +7,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class ConfigProvider
 {
-    const ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE = 'allow_inpost_delivery';
+    const ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE = 'allow_inpost_delivery22';
     const XML_PATH_INPOST_GENERAL_ACTIVE = 'carriers/inpost/general/active';
     const XML_PATH_INPOST_GENERAL_COMPANY_NAME = 'carriers/inpost/general/company_name';
     const XML_PATH_INPOST_GENERAL_EMAIL = 'carriers/inpost/general/email';
