@@ -7,13 +7,10 @@ use Magento\Framework\DataObject;
 class CreateShipmentRequest extends DataObject
 {
     private $receiver;
-
     private $sender;
     private $parcels;
-
     private $service;
     private $customAttributes;
-
     private $reference;
     private $additionalServices;
     private $externalCustomerId;
@@ -145,4 +142,8 @@ class CreateShipmentRequest extends DataObject
     {
         $this->sender = $sender;
     }
+
+    /**
+     * @param mixed $sender
+     */
 }

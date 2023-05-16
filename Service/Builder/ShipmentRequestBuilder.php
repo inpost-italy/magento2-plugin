@@ -54,6 +54,7 @@ class ShipmentRequestBuilder
             ],
         ]);
 
+        $this->data->setReference($order->getIncrementId());
         $this->setCustomAttributes([
             'target_point' => $address->getInpostPointId()
         ]);
@@ -82,6 +83,8 @@ class ShipmentRequestBuilder
 
     public function build()
     {
-        return $this->createShipmentRequestFactory->create(['data' => $this->data->toArray()]);
+        return $this->createShipmentRequestFactory->create(
+            ['data' => $this->data->toArray()]
+        );
     }
 }

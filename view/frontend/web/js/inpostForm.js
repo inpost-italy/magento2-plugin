@@ -38,8 +38,10 @@ define([
                             functions: []
                         },
                         map: {
-                            googleKey: config.gMapsApiKey,
-                            initialTypes: ['parcel_locker']
+                            initialTypes: ['pop', 'parcel_locker'],
+                            useGeolocation: false
+                        },
+                        display: {
                         }
                     });
                 }
@@ -60,7 +62,18 @@ define([
                         $('#remove-selected-point').show();
                         $('#inpost_selected_point_id').val(point.name);
                         $('#inpost_overlay').hide();
-                    }, {width: 1200, height: 600});
+                    }, {});
+
+
+                    // Add event listener to the input
+                    document.getElementById('easypack-search').addEventListener('input', (input) => {
+                        // Check if the input is empty
+                        if ($(input.target).val() === '') {
+                            // Trigger the alert
+                            window.mapController.setCenterFromArray([41.898386, 12.516985]);
+                        }
+                    });
+
 
                     if ($('input[name="postcode"]').val()) {
                         modalWidget.searchPlace($('input[name="postcode"]').val());
@@ -69,6 +82,8 @@ define([
                     $('#widget-modal .widget-modal__close').click(function () {
                         $('#inpost_overlay').hide();
                     });
+
+                    $("#widget-modal").css({"max-height":"90%"});
                 }
 
                 window.removeSelectedPoint = function () {
