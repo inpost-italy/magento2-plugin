@@ -31,7 +31,7 @@ define([
                         defaultLocale: 'it',
                         apiEndpoint: config.pointsApiUrl,
                         mapType: config.mapType,
-                        searchType: config.searchType,
+                        searchType: config.mapType,
                         points: {
                             types: ['pop', 'parcel_locker'],
                             allowedToolTips: ['pok', 'pop'],
@@ -74,9 +74,8 @@ define([
                         }
                     });
 
-
-                    if ($('input[name="postcode"]').val()) {
-                        modalWidget.searchPlace($('input[name="postcode"]').val());
+                    if (quote.shippingAddress().postcode) {
+                        modalWidget.searchPlace(quote.shippingAddress().postcode);
                     }
 
                     $('#widget-modal .widget-modal__close').click(function () {

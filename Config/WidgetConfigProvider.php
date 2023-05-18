@@ -6,8 +6,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class WidgetConfigProvider
 {
-    const WIDGET_SEARCH_TYPE = 'carriers/inpost/widget/search_type';
-
     const WIDGET_GMAP_API_KEY = 'carriers/inpost/widget/gmaps_api_key';
 
     const WIDGET_MAP_TYPE = 'carriers/inpost/widget/map_type';
@@ -34,8 +32,4 @@ class WidgetConfigProvider
         return $this->scopeConfig->getValue(self::WIDGET_GMAP_API_KEY);
     }
 
-    public function getSearchType()
-    {
-        return $this->scopeConfig->getValue(self::WIDGET_SEARCH_TYPE);
-    }
 }

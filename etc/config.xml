@@ -15,8 +15,7 @@
                     <specificcountry>IT</specificcountry>
                 </general>
                 <widget>
-                    <search_type>google</search_type>
-                    <map_type>google</map_type>
+                    <map_type>osm</map_type>
                 </widget>
             </inpost>
         </carriers>

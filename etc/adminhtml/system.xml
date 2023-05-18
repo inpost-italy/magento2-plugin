@@ -143,11 +143,6 @@
                         </depends>
                     </field>
 
-                    <field id="search_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
-                           showInStore="1">
-                        <label>Search type</label>
-                        <source_model>InPost\Shipment\Config\Source\MapSources</source_model>
-                    </field>
                 </group>
 
                 <group id="return" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">

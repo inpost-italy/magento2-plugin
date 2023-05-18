@@ -33,7 +33,6 @@ class InpostConfigProvider implements ConfigProviderInterface
         return [
             'inpost' => [
                 'mapType' => $this->widgetConfigProvider->getMapType(),
-                'searchType' => $this->widgetConfigProvider->getSearchType(),
                 'gMapsApiKey' => $this->widgetConfigProvider->getGmapsApiKey(),
                 'pointsApiUrl' => $this->configProvider->getApiBaseUrl() . '/v1/',
             ]
