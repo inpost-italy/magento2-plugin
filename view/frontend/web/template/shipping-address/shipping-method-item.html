@@ -25,14 +25,20 @@
 <tr class="row" id="inpost-extra-info">
     <td colspan="4">
         <div class="fieldset">
+            <img class="inpost-logo" data-bind="attr: {src: require.toUrl('InPost_Shipment/images/inpost-logo.png')}" alt="InPost Logo">
             <div class="field _required">
                 <label class="label">
-                    <strong data-bind="i18n: 'Inpost Pickup Point'"></strong>
+                    <strong data-bind="i18n: 'Inpost Collection Point'"></strong>
                 </label>
-                <br>
-                <div>
-                    <a href="#" id="easypack-map-modal-toggler" onclick="openInPostModal(); return false;"
-                       data-bind="i18n: 'Open map'"></a>
+                <div class="shipping-method-delivery-info-wrapper">
+                    <i class="shipping-method-delivery-info"
+                       data-bind="i18n: 'Sustainable delivery estimated in 48-72 hours'"></i>
+                </div>
+                <div class="open-map-wrapper">
+                    <strong>
+                        <a href="#" id="easypack-map-modal-toggler" onclick="openInPostModal(); return false;"
+                           data-bind="i18n: 'SELECT COLLECTION POINT'"></a>
+                    </strong>
                 </div>
                 <div id="inpost-point-details">
                     <strong data-bind="i18n: 'Name:'"></strong> <span class="point-name"></span><br>
@@ -40,10 +46,11 @@
                     <strong data-bind="i18n: 'Postcode:'"></strong> <span class="point-postcode"></span><br>
                     <strong data-bind="i18n: 'Opening hours:'"></strong> <span class="point-opening-hours"></span><br>
                 </div>
-                <a href="#" id="remove-selected-point"
-                   onclick="removeSelectedPoint(); return false;"
-                   data-bind="i18n: 'Remove'"></a>
-
+                <strong>
+                    <a href="#" id="remove-selected-point"
+                       onclick="removeSelectedPoint(); openInPostModal(); return false;"
+                       data-bind="i18n: 'CHANGE COLLECTION POINT'"></a>
+                </strong>
                 <input id="inpost_selected_point_id" name="inpost_selected_point_id" type="hidden"/>
                 <div id="inpost-required-error-message" class="field-error" style="display: none;">
                     <span data-bind="i18n: 'This is a required field.'"></span>
