@@ -24,7 +24,10 @@
         <policy id="connect-src">
             <values>
                 <value id="inpost-pl" type="host">*.inpost.pl</value>
-                <value id="inpost-it" type="host">*.easypack24.net</value>
+                <value id="inpost-it" type="host">*.inpost.it</value>
+                <value id="gmaps" type="host">*.googleapis.com</value>
+                <value id="easypack" type="host">*.easypack24.net</value>
+                <value id="maps.googleapis.com" type="host">maps.googleapis.com</value>
             </values>
         </policy>
 
