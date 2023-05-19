@@ -62,6 +62,7 @@ define([
                         $('#remove-selected-point').show();
                         $('#inpost_selected_point_id').val(point.name);
                         $('#inpost_overlay').hide();
+                        $('#easypack-map-modal-toggler').hide();
                     }, {});
 
 
@@ -93,6 +94,7 @@ define([
                     $('#inpost-point-details').find('.point-opening_hours').html('');
                     $('#inpost-point-details').hide();
                     $('#remove-selected-point').hide();
+                    $('#easypack-map-modal-toggler').show();
                 }
 
                 $(document).on('submit','#co-shipping-method-form',function(event) {
