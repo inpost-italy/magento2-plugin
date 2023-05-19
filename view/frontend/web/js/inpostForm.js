@@ -31,7 +31,7 @@ define([
                         defaultLocale: 'it',
                         apiEndpoint: config.pointsApiUrl,
                         mapType: config.mapType,
-                        searchType: config.mapType,
+                        searchType: "google",
                         points: {
                             types: ['pop', 'parcel_locker'],
                             allowedToolTips: ['pok', 'pop'],

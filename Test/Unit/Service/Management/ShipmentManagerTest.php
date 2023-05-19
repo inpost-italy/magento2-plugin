@@ -22,7 +22,7 @@ class ShipmentManagerTest extends TestCase
     private $builderMock;
 
     /**
-     * @var CreateShipmentService|MockObject
+     * @var CreateShipmentService|MockObjectz
      */
     private $createShipmentServiceMock;
 
