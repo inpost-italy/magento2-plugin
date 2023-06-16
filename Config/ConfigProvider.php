@@ -63,6 +63,11 @@ class ConfigProvider
         return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_COMPANY_NAME);
     }
 
+    public function getService()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_COMPANY_NAME);
+    }
+
     /**
      * @return string|null
      */

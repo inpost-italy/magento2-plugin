@@ -102,6 +102,52 @@
                     </field>
                 </group>
 
+                <group id="flow" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Shipment flow</label>
+
+                    <field id="type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                           showInStore="1">
+                        <label>Type</label>
+                        <source_model>InPost\Shipment\Config\Source\FlowSources</source_model>
+                    </field>
+
+                    <field id="street" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="type">inpost_courier_c2c</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                        <comment>Pick up address for the courier</comment>
+                        <label>Street</label>
+                    </field>
+
+                    <field id="building" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="type">inpost_courier_c2c</field>
+                        </depends>
+                        <comment>Pick up address for the courier</comment>
+                        <validate>required-entry</validate>
+                        <label>Building n.</label>
+                    </field>
+
+                    <field id="city" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="type">inpost_courier_c2c</field>
+                        </depends>
+                        <comment>Pick up address for the courier</comment>
+                        <validate>required-entry</validate>
+                        <label>City</label>
+                    </field>
+
+                    <field id="postcode" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="type">inpost_courier_c2c</field>
+                        </depends>
+                        <comment>Pick up address for the courier</comment>
+                        <validate>required-entry</validate>
+                        <label>Post code</label>
+                    </field>
+                </group>
+
                 <group id="pdfconfig" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>PDF</label>
                 </group>

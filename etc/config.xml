@@ -17,6 +17,9 @@
                 <widget>
                     <map_type>osm</map_type>
                 </widget>
+                <flow>
+                    <type>inpost_locker_standard</type>
+                </flow>
             </inpost>
         </carriers>
     </default>
