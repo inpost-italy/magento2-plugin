@@ -113,7 +113,7 @@
 
                     <field id="street" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <depends>
-                            <field id="type">inpost_courier_c2c</field>
+                            <field id="type">H2L</field>
                         </depends>
                         <validate>required-entry</validate>
                         <comment>Pick up address for the courier</comment>
@@ -122,7 +122,7 @@
 
                     <field id="building" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <depends>
-                            <field id="type">inpost_courier_c2c</field>
+                            <field id="type">H2L</field>
                         </depends>
                         <comment>Pick up address for the courier</comment>
                         <validate>required-entry</validate>
@@ -131,7 +131,7 @@
 
                     <field id="city" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <depends>
-                            <field id="type">inpost_courier_c2c</field>
+                            <field id="type">H2L</field>
                         </depends>
                         <comment>Pick up address for the courier</comment>
                         <validate>required-entry</validate>
@@ -140,7 +140,7 @@
 
                     <field id="postcode" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <depends>
-                            <field id="type">inpost_courier_c2c</field>
+                            <field id="type">H2L</field>
                         </depends>
                         <comment>Pick up address for the courier</comment>
                         <validate>required-entry</validate>

@@ -32,7 +32,7 @@ class ShippingStatusAction
     {
         $order = $this->orderRepository->get($orderId);
         $order->setState('shipping');
-        $order->setStatus('shipping');
+        $order->setStatus('Shipping');
         $this->orderRepository->save($order);
     }
 }

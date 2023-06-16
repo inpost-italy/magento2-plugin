@@ -7,6 +7,7 @@ use InPost\Shipment\Carrier\Inpost;
 use InPost\Shipment\Config\ConfigProvider;
 use InPost\Shipment\Service\Api\CreateShipmentService;
 use InPost\Shipment\Service\Api\GetShipmentService;
+use InPost\Shipment\Service\Builder\DataProcessor\ServiceProcessor;
 use InPost\Shipment\Service\Builder\ShipmentRequestBuilder;
 use InPost\Shipment\Service\Http\HttpClientException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -42,6 +43,7 @@ class ShipmentManager
 
     /** @var GetShipmentService */
     private $getShipmentService;
+    private ServiceProcessor $serviceProcessor;
 
     /**
      * @param ShipmentRequestBuilder $builder
@@ -55,6 +57,7 @@ class ShipmentManager
         ShipmentRequestBuilder $builder,
         CreateShipmentService $createShipmentService,
         GetShipmentService $getShipmentService,
+        ServiceProcessor $serviceProcessor,
         TrackFactory $trackFactory,
         ShipmentRepository $shipmentRepository,
         ConfigProvider $configProvider
@@ -65,6 +68,7 @@ class ShipmentManager
         $this->shipmentRepository = $shipmentRepository;
         $this->getShipmentService = $getShipmentService;
         $this->configProvider = $configProvider;
+        $this->serviceProcessor = $serviceProcessor;
     }
 
     /**
@@ -118,7 +122,7 @@ class ShipmentManager
             'phone' => $this->configProvider->getMobilePhoneNumber(),
         ]);
         $builder->setParcels(['template' => $packageOption]);
-        $builder->setService('inpost_locker_standard');
+        $this->serviceProcessor->process($builder);
 
         return $builder;
     }

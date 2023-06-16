@@ -13,12 +13,17 @@ class ConfigProvider
     const XML_PATH_INPOST_GENERAL_EMAIL = 'carriers/inpost/general/email';
     const XML_PATH_INPOST_GENERAL_MOBILE_PHONE_NUMBER = 'carriers/inpost/general/mobile_phone_number';
 
+    const XML_PATH_INPOST_FLOW_TYPE = 'carriers/inpost/flow/type';
+    const XML_PATH_INPOST_FLOW_STREET = 'carriers/inpost/flow/street';
+    const XML_PATH_INPOST_FLOW_BUILDING = 'carriers/inpost/flow/building';
+    const XML_PATH_INPOST_FLOW_CITY = 'carriers/inpost/flow/city';
+    const XML_PATH_INPOST_FLOW_POSTCODE = 'carriers/inpost/flow/postcode';
+
     const XML_PATH_INPOST_CREDENTIALS_DEBUG = 'carriers/inpost/credentials/debug';
     const XML_PATH_INPOST_CREDENTIALS_MERCHANT_ID = 'carriers/inpost/credentials/merchant_id';
     const XML_PATH_INPOST_CREDENTIALS_API_KEY = 'carriers/inpost/credentials/api_key';
 
     const URL_SHIPX_STAGING = 'https://stage-api-shipx-it.easypack24.net';
-
     const URL_SHIPX_PRODUCTION = 'https://api-shipx-it.easypack24.net';
 
     /** @var ScopeConfigInterface */
@@ -65,7 +70,20 @@ class ConfigProvider
 
     public function getService()
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_COMPANY_NAME);
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_FLOW_TYPE);
+    }
+
+    /**
+     * @return array
+     */
+    public function getSenderAddress() : array
+    {
+        return [
+            'city'              => $this->scopeConfig->getValue(self::XML_PATH_INPOST_FLOW_CITY),
+            'post_code'         => $this->scopeConfig->getValue(self::XML_PATH_INPOST_FLOW_POSTCODE),
+            'street'            => $this->scopeConfig->getValue(self::XML_PATH_INPOST_FLOW_STREET),
+            'building_number'   => $this->scopeConfig->getValue(self::XML_PATH_INPOST_FLOW_BUILDING),
+        ];
     }
 
     /**

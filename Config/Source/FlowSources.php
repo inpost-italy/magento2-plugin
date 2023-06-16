@@ -4,16 +4,20 @@ namespace InPost\Shipment\Config\Source;
 
 class FlowSources implements \Magento\Framework\Option\ArrayInterface
 {
+    const FLOW_SERVICE_TYPE_LOCKER  = 'L2L';
+
+    const FLOW_SERVICE_TYPE_HUB     = 'H2L';
+
     /**
      * @var array[]
      */
     private $values = [
         [
-            'value' => 'inpost_locker_standard',
+            'value' => self::FLOW_SERVICE_TYPE_LOCKER,
             'label' => 'Locker2Locker'
         ],
         [
-            'value' => 'inpost_courier_c2c',
+            'value' => self::FLOW_SERVICE_TYPE_HUB,
             'label' => 'Locker2Hub'
         ]
     ];
@@ -34,8 +38,8 @@ class FlowSources implements \Magento\Framework\Option\ArrayInterface
     public function toArray()
     {
         return [
-            'inpost_locker_standard' => 'Locker2Locker',
-            'inpost_courier_c2c' => 'Locker2Hub',
+            FlowSources::FLOW_SERVICE_TYPE_LOCKER => 'Locker2Locker',
+            FlowSources::FLOW_SERVICE_TYPE_HUB => 'Locker2Hub',
         ];
     }
 }
