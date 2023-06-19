@@ -18,7 +18,7 @@ class FlowSources implements \Magento\Framework\Option\ArrayInterface
         ],
         [
             'value' => self::FLOW_SERVICE_TYPE_HUB,
-            'label' => 'Locker2Hub'
+            'label' => 'Hub2Locker'
         ]
     ];
 
@@ -39,7 +39,7 @@ class FlowSources implements \Magento\Framework\Option\ArrayInterface
     {
         return [
             FlowSources::FLOW_SERVICE_TYPE_LOCKER => 'Locker2Locker',
-            FlowSources::FLOW_SERVICE_TYPE_HUB => 'Locker2Hub',
+            FlowSources::FLOW_SERVICE_TYPE_HUB => 'Hub2Locker',
         ];
     }
 }
