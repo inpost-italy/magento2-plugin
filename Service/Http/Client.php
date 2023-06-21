@@ -65,7 +65,10 @@ class Client
                 'body' => $body
             ]);
         } catch (GuzzleException $e) {
-            throw new HttpClientException($e->getMessage());
+            $response = $e->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+
+            throw new HttpClientException($responseBodyAsString);
         }
 
         if ($response->getStatusCode() > 210) {
