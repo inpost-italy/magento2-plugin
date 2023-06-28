@@ -1,9 +1,15 @@
 # InPost Shipment Magento 2 Module
 This Magento 2 module adds a new shipping method to your online store called "InPost Shipment". With this module, customers can select this shipping method during checkout, and the order will be shipped using the Italian InPost Shipping Service.
 
-## Installation
-To install this module, simply download the source code and copy the `InPost` directory to the `app/code` directory of your Magento installation. Then, run the following command from your Magento root directory:
+## Installation via compose
+```
+composer require inpost-italy/magento2-plugin
+```
 
+## Manual installation
+To install this module, simply download the source code and copy the `InPost` directory to the `app/code` directory of your Magento installation. 
+
+## Process module installation
 ```bin
 bin/magento module:enable InPost_Shipment
 bin/magento setup:upgrade
