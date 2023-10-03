@@ -11,7 +11,7 @@ var config = {
         mixins: {
             'Magento_Checkout/js/action/select-shipping-method': {
                 'InPost_Shipment/js/action/select-shipping-method-mixin': true
-            },
+            }
         }
     }
 };
