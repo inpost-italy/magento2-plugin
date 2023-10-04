@@ -138,7 +138,6 @@ define([
                 }, 3000);
 
                 setTimeout(function() {
-                    debugger;
                     if (self.isTriggerPosted == false) {
                         $('#inpost_selected_point_id').change($.proxy(function() {
                             console.log('InPost point id change')
@@ -151,7 +150,6 @@ define([
                 }, 5000);
 
                 setTimeout(function() {
-                    debugger;
                     if (self.isTriggerPosted == false) {
                         $('#inpost_selected_point_id').change($.proxy(function() {
                             console.log('InPost point id change')
