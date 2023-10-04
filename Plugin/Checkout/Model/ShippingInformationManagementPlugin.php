@@ -49,6 +49,7 @@ class ShippingInformationManagementPlugin
             $inpostPointId = $extAttributes->getInpostPointId();
 
             if (!$inpostPointId) {
+                return [$cartId, $addressInformation];
                 throw new InputException(
                     __('Cannot proceed checkout without selected Inpost Point.')
                 );

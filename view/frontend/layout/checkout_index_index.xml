@@ -26,8 +26,16 @@
                                                         </item>
                                                     </item>
                                                 </item>
+                                                <item name="shipping-address-fieldset" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="custom-shipping-validation" xsi:type="array">
+                                                            <item name="component" xsi:type="string">InPost_Shipment/js/view/checkout-add-validator-pool</item>
+                                                        </item>
+                                                    </item>
+                                                </item>
                                             </item>
                                         </item>
+
                                     </item>
                                 </item>
                             </item>
