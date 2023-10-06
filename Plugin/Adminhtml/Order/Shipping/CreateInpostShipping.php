@@ -2,7 +2,7 @@
 
 namespace InPost\Shipment\Plugin\Adminhtml\Order\Shipping;
 
-use InPost\Shipment\Service\Builder\ShipmentRequestBuilder;
+use InPost\Shipment\Carrier\Inpost;
 use InPost\Shipment\Service\Management\ShipmentManager;
 use InPost\Shipment\Service\Order\ShippingStatusAction;
 use Magento\Framework\Exception\InputException;
@@ -49,10 +49,15 @@ class CreateInpostShipping
         Save $saveShipmentAction,
         callable $proceed
     ) {
+
         $request = $saveShipmentAction->getRequest();
         $orderId = $request->getParam('order_id');
         if (empty($orderId)) {
-            throw new \Exception("Unable to create a shiopment. Order ID is missing");
+            throw new \Exception("Unable to create a shipment. Order ID is missing");
+        }
+
+        if (! $this->isInpostOrder($orderId)) {
+            return $proceed();
         }
 
         $packageOption = $request->getParam('inpost')['package_type'] ?? null;
@@ -87,4 +92,20 @@ class CreateInpostShipping
 
         return $order->getShipmentsCollection()->getLastItem();
     }
+
+    /**
+     * Check if current order has inpost shipment
+     *
+     * @param $orderId
+     * @return bool
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    private function isInpostOrder($orderId) : bool
+    {
+        $order = $this->orderRepository->get($orderId);
+
+        return strpos($order->getShippingMethod(), Inpost::CARRIER_CODE) !== false;
+    }
+
 }
