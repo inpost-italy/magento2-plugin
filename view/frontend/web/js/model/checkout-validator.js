@@ -15,7 +15,7 @@ define(
                 }
 
                 if (!$('#inpost_selected_point_id').val()) {
-                    alert('Please select inpost point')
+                    alert('Seleziona il punto di Inpost')
                     return false;
                 }
 

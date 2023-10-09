@@ -11,6 +11,6 @@ class PointData extends DataObject
     {
         $addressDetails = $this->getAddressDetails();
 
-        return "{$this->getName()}, {$addressDetails['street']}, {$addressDetails['building_number']} ({$this->getLocationDescription()},{$this->getLocationDescription1()})";
+        return "{$this->getName()}, {$addressDetails['street']}, {$addressDetails['building_number']} ({$this->getLocationDescription()})";
     }
 }
