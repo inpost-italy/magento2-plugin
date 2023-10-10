@@ -1,31 +1,47 @@
 define([
         'uiComponent',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/shipping-rate-registry',
-        'Magento_Checkout/js/checkout-data',
         'jquery',
-        'knockout'
+        'knockout',
+        'Magento_Checkout/js/model/quote'
+
     ],
     function (
         Component,
-        quote,
-        rateReg,
-        checkoutData,
         $,
-        ko
+        ko,
+        quote
     ) {
         'use strict';
+        window.isInpostInstantiated = false;
 
         return Component.extend({
             defaults: {
-                template: 'InPost_Shipment/form'
+                template: 'InPost_Shipment/inpost-form.html'
             },
             config: window.checkoutConfig.inpost,
+            paymentMethodSelected: ko.observable(false),
+            selectedPoint: ko.observable(''),
+            line1: ko.observable(''),
+            line2: ko.observable(''),
+            openingHours: ko.observable(''),
+            postCode: ko.observable(''),
+            isInstantiated: false,
             initialize: function () {
-                this.initWidget(this.config);
+                if (!window.isInpostInstantiated) {
+                    this.initWidget(this.config);
+                }
+
+                window.isInpostInstantiated = true;
                 this._super();
             },
+            selectedPointChanged: function(value) {
+                // Notify subscribers
+                return value;
+            },
             initWidget: function (config) {
+                self = this;
+                this.selectedPoint.subscribe(this.selectedPointChanged);
+
                 window.easyPackAsyncInit = function () {
                     easyPack.init({
                         defaultLocale: 'it',
@@ -41,87 +57,47 @@ define([
                             initialTypes: ['pop', 'parcel_locker'],
                             useGeolocation: false
                         },
-                        display: {
-                        }
+                        display: {}
                     });
                 }
-
-                window.openInPostModal = function () {
-                    $('#inpost_overlay').show();
-                    $('#inpost-required-error-message').hide();
-
-                    let modalWidget = easyPack.modalMap(function (point, modal) {
-                        modal.closeModal();
-                        $('#inpost-point-details').show();
-
-                        $('#inpost-point-details').find('.point-name').html(point.name);
-                        $('#inpost-point-details').find('.point-address').html(point.address.line1);
-                        $('#inpost-point-details').find('.point-postcode').html(point.address.line2);
-                        $('#inpost-point-details').find('.point-opening-hours').html(point.opening_hours);
-
-                        $('#remove-selected-point').show();
-                        $('#inpost_selected_point_id').val(point.name);
-                        $('#inpost_overlay').hide();
-                        $('#easypack-map-modal-toggler').hide();
-                    }, {});
-
-
-                    // Add event listener to the input
-                    document.getElementById('easypack-search').addEventListener('input', (input) => {
-                        // Check if the input is empty
-                        if ($(input.target).val() === '') {
-                            // Trigger the alert
-                            window.mapController.setCenterFromArray([41.898386, 12.516985]);
-                        }
-                    });
-
-                    if (quote.shippingAddress().postcode) {
-                        modalWidget.searchPlace(quote.shippingAddress().postcode);
-                    }
-
-                    $('#widget-modal .widget-modal__close').click(function () {
-                        $('#inpost_overlay').hide();
-                    });
-
-                    $("#widget-modal").css({"max-height":"90%"});
-                }
-
-                window.removeSelectedPoint = function () {
-                    $('#inpost_selected_point_id').val('');
-                    $('#inpost-point-details').find('.point-name').html('');
-                    $('#inpost-point-details').find('.point-address').html('');
-                    $('#inpost-point-details').find('.point-postcode').html('');
-                    $('#inpost-point-details').find('.point-opening_hours').html('');
-                    $('#inpost-point-details').hide();
-                    $('#remove-selected-point').hide();
-                    $('#easypack-map-modal-toggler').show();
-                }
-
-                $(document).on('submit','#co-shipping-method-form',function(event) {
-                    if ((quote.shippingMethod()['method_code']) === 'inpost' && $('#inpost_selected_point_id').val() === '') {
-                        $('#inpost-required-error-message').show();
-                        event.preventDefault();
-                        return false;
-                    }
-                });
-
-                $(document).on('change', '#co-shipping-form input[name="telephone"]', function() {
-                    let address = quote.shippingAddress();
-                    address.telephone = $(this).val();
-                    rateReg.set(address.getKey(), null);
-                    rateReg.set(address.getCacheKey(), null);
-                    quote.shippingAddress(address);
-                });
-
-                $('document').ready(function () {
-                    setTimeout(function() {
-                        if (checkoutData.getSelectedShippingRate() === 'inpost_inpost') {
-                            $('#inpost-extra-info').show();
-                        }
-                    }, 3000);
-                });
 
                 return this.widget;
+            },
+            openInPostModal: function() {
+                $('#inpost_overlay').show();
+
+                var modalWidget = easyPack.modalMap(function (point, modal) {
+                    modal.closeModal();
+
+                    self.line1(point.address.line1);
+                    self.line2(point.address.line2);
+                    self.openingHours(point.opening_hours);
+                    self.postCode(point.address_details.post_code)
+                    console.log('change')
+                    self.selectedPoint(point.name);
+
+                   $('#easypack-map-modal-toggler').hide()
+                   $('#inpost_overlay').hide()
+                }, {});
+
+                // Set postal code from address
+                if (quote.shippingAddress().postcode) {
+                    modalWidget.searchPlace(quote.shippingAddress().postcode);
+                }
+
+                $('#easypack-search').on('input', function(input) {
+                    // Check if the input is empty
+                    if ($(input.target).val() === '') {
+                        // Trigger the alert
+                        window.mapController.setCenterFromArray([41.898386, 12.516985]);
+                    }
+                });
+
+                $('#widget-modal .widget-modal__close').click(function () {
+                    $('#inpost_overlay').hide();
+                });
+
+                $("#widget-modal").css({"max-height":"90%"});
             }
         });
     });

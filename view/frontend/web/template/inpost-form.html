@@ -1,0 +1,45 @@
+<span />
+<!-- ko if: paymentMethodSelected -->
+<tr class="row" id="inpost-extra-info" data-bind="scope: 'additional_block'">
+    <td class="inpost-td" colspan="4">
+        <div class="fieldset">
+
+            <div class="field" style="font-size: 15px;">
+
+                <div style="position: relative; margin-top: 10px;">
+                    <label class="label">
+                        <strong data-bind="i18n: 'Inpost Collection Point'"></strong>
+                    </label>
+                    <img class="inpost-logo" data-bind="attr: {src: require.toUrl('InPost_Shipment/images/inpost-logo.png')}" alt="InPost Logo" style="position: absolute; top: 0; right: 0;">
+
+                    <div class="shipping-method-delivery-info-wrapper">
+                        <i class="shipping-method-delivery-info"
+                           data-bind="i18n: 'Sustainable delivery estimated in 48-72 hours'"></i>
+                    </div>
+                </div>
+
+                <div data-bind="ifnot: selectedPoint">
+                    <div class="open-map-wrapper">
+                        <strong>
+                            <a href="#" id="easypack-map-modal-toggler" data-bind="click: openInPostModal, i18n: 'SELECT COLLECTION POINT'"></a>
+                        </strong>
+                    </div>
+                </div>
+
+                <div data-bind="if: selectedPoint" style="padding-top: 3px;">
+                    <strong data-bind="i18n: 'Name:'"></strong> <span data-bind="text: selectedPoint"></span><br>
+                    <strong data-bind="i18n: 'Address:'"></strong> <span class="point-address" data-bind="text: line1"></span><br>
+                    <strong data-bind="i18n: 'Postcode:'"></strong> <span class="point-postcode" data-bind="text: postCode"></span><br>
+                    <strong data-bind="i18n: 'Opening hours:'"></strong> <span class="point-opening-hours" data-bind="text: openingHours"></span><br>
+                    <a href="#" id="remove-selected-point"
+                       data-bind="click: openInPostModal, i18n: 'CHANGE COLLECTION POINT'"></a>
+                </div>
+
+                <div id="easypack-map"></div>
+                <div id="inpost_overlay"></div>
+
+            </div>
+        </div>
+    </td>
+</tr>
+<!-- /ko -->

@@ -3,16 +3,17 @@ var isAmastyEnabled = window.checkoutConfig && window.checkoutConfig.hasOwnPrope
 var config = {
     map: {
         '*': {
-            inpostForm: isAmastyEnabled ? 'InPost_Shipment/js/inpostForm' : 'InPost_Shipment/js/inpostForm-amasty',
-            'Magento_Checkout/template/shipping-address/shipping-method-item.html': 'InPost_Shipment/template/shipping-address/shipping-method-item.html',
-            'Magento_Checkout/js/model/shipping-save-processor/payload-extender':'InPost_Shipment/js/model/shipping-save-processor/payload-extender',
-            'Amasty_Checkout/template/onepage/shipping/methods.html': 'InPost_Shipment/template/amasty/onepage/shipping/methods.html'
+            inpostForm: 'InPost_Shipment/js/inpostForm',
+            'Magento_Checkout/js/model/shipping-save-processor/payload-extender':'InPost_Shipment/js/model/shipping-save-processor/payload-extender'
         }
     },
     config: {
         mixins: {
             'Magento_Checkout/js/action/select-shipping-method': {
                 'InPost_Shipment/js/action/select-shipping-method-mixin': true
+            },
+            'InPost_Shipment/js/inpostForm': {
+                'InPost_Shipment/js/mixin/amasty/update-shipping-rates-mixin': isAmastyEnabled
             }
         }
     }

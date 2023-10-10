@@ -2,24 +2,27 @@ define(
     [
         'jquery',
         'ko',
-        'uiRegistry',
+        'inpostForm',
         'Magento_Checkout/js/model/quote'
     ],
-    function ($, ko, registry, b) {
+    function ($, ko, inpostForm, checkoutData) {
         'use strict';
 
         return {
+            checkoutData: checkoutData,
+            inpost: inpostForm,
             validate: function () {
-                if (! window.is_inpost_selected) {
+                var method = this.checkoutData.shippingMethod();
+                if (!method || method.carrier_code !== 'inpost') {
                     return true;
                 }
 
-                if (!$('#inpost_selected_point_id').val()) {
-                    alert('Seleziona il punto di Inpost')
+                if (this.inpost().selectedPoint() == '') {
+                    alert('Seleziona il punto di Inpost');
                     return false;
                 }
 
-                return true;
+                return true
             }
         };
     }

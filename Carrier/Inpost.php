@@ -28,7 +28,7 @@ class Inpost extends AbstractCarrier implements CarrierInterface
 
     const CARRIER_CODE = 'inpost';
 
-    const METHOD_LOCKER = 'inpost_loceker';
+    const METHOD_LOCKER = 'inpost_locker';
 
     const METHOD_COURIER = 'inpost_courier';
 
@@ -164,11 +164,10 @@ class Inpost extends AbstractCarrier implements CarrierInterface
 
         // Validate phone number
         if (!$this->validatePhoneNumber()) {
-            return $result;
+//            return $result;
         }
 
-        $pointId = $this->fetchOption($request);
-        $methodTitle = $pointId ? $this->getPointInfo($pointId) : self::CARRIER_TITLE;
+        $methodTitle = self::CARRIER_TITLE;
 
         $method = $this->rateMethodFactory->create();
         $method->setCarrier(self::CARRIER_CODE);
@@ -216,16 +215,6 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     public function getAllowedMethods()
     {
         return [self::METHOD_LOCKER, self::METHOD_COURIER];
-    }
-
-    private function getPointInfo(?string $pointId): ?string
-    {
-        $apiPointsRequest = $this->pointsServiceRequestFactory->create();
-        $apiPointsRequest->setName($pointId);
-        $pointsService = $this->apiServiceProvider->getPointsApiService();
-        $points = $pointsService->getPoints($apiPointsRequest);
-
-        return !$points->isEmpty() ? $points->getFirstItem()->getAddressInfo() : null;
     }
 
     /**

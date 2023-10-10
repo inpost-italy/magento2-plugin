@@ -18,11 +18,18 @@
                                             <item name="children" xsi:type="array">
                                                 <item name="shippingAddress" xsi:type="array">
                                                     <item name="children" xsi:type="array">
+                                                        <!-- Inject inpost widget in shippingAdditional display area of payment list -->
+                                                        <item name="shippingAdditional" xsi:type="array">
+                                                            <item name="component" xsi:type="string">uiComponent</item>
+                                                            <item name="displayArea" xsi:type="string">shippingAdditional</item>
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="shippingAdditional" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">inpostForm</item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
                                                         <item name="inpostForm" xsi:type="array">
                                                             <item name="component" xsi:type="string">inpostForm</item>
-                                                            <item name="config" xsi:type="array">
-                                                                <item name="displayArea" xsi:type="string">inpostForm</item>
-                                                            </item>
                                                         </item>
                                                     </item>
                                                 </item>
