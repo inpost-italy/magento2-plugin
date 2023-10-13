@@ -164,7 +164,7 @@ class Inpost extends AbstractCarrier implements CarrierInterface
 
         // Validate phone number
         if (!$this->validatePhoneNumber()) {
-//            return $result;
+            return $result;
         }
 
         $methodTitle = self::CARRIER_TITLE;
