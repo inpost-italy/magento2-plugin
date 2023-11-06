@@ -4,5 +4,13 @@
     "description": "Magento 2 module for Inpost IT integration",
     "type": "magento2-module",
     "license": "MIT",
-    "require": {}
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "InPost\\Shipment\\": ""
+        }
+    }
 }
