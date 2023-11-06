@@ -13,7 +13,7 @@ var config = {
                 'InPost_Shipment/js/action/select-shipping-method-mixin': true
             },
             'InPost_Shipment/js/inpostForm': {
-                'InPost_Shipment/js/mixin/amasty/update-shipping-rates-mixin': isAmastyEnabled
+                'InPost_Shipment/js/mixin/amasty/update-shipping-rates-mixin': isAmastyEnabled !== undefined
             }
         }
     }
