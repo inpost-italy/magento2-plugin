@@ -29,7 +29,7 @@ class ConfigProvider
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
     protected $sandboxApiUrl = "https://stage-api-it-points.easypack24.net";
-    protected $productionApiUrl = "https://api-it-points.easypack24.net";
+    protected $productionApiUrl = "https://api-it-local-points.easypack24.net";
 
     /**
      * @param ScopeConfigInterface $scopeConfig
