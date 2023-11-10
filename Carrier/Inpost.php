@@ -153,12 +153,12 @@ class Inpost extends AbstractCarrier implements CarrierInterface
         }
 
         // Weight limitations check
-        if (!$this->validateWeightLimits()) {
+        if (!$this->validateWeightLimits($request)) {
             return $result;
         }
 
         // Validate category delivery settings
-        if (!$this->validateCategoryDeliverySettings()) {
+        if (!$this->validateCategoryDeliverySettings($request)) {
             return $result;
         }
 
@@ -267,17 +267,18 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     }
 
     /**
+     * @param \Magento\Framework\DataObject $request
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function validateWeightLimits(): bool
+    protected function validateWeightLimits(\Magento\Framework\DataObject $request): bool
     {
         $totalWeight = 0;
         $itemWeightLimit = (float)$this->getConfigData('delivery_options/max_item_weight');
         $totalCartWeightLimit = (float)$this->getConfigData('delivery_options/max_total_cart_weight');
 
-        foreach ($this->checkoutSession->getQuote()->getAllItems() as $item) {
+        foreach ($request->getAllItems() as $item) {
             if ($itemWeightLimit > 0 && $item->getWeight() > $itemWeightLimit) {
                 return false;
             }
@@ -292,16 +293,17 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     }
 
     /**
+     * @param \Magento\Framework\DataObject $request
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function validateCategoryDeliverySettings(): bool
+    public function validateCategoryDeliverySettings(\Magento\Framework\DataObject $request): bool
     {
         $categoryIds = [];
 
         /** @var Item $item */
-        foreach ($this->checkoutSession->getQuote()->getAllItems() as $item) {
+        foreach ($request->getAllItems() as $item) { 
             $categoryIds = array_merge($categoryIds, $item->getProduct()->getCategoryIds());
         }
 
@@ -330,6 +332,7 @@ class Inpost extends AbstractCarrier implements CarrierInterface
      */
     public function validatePhoneNumber(): bool
     {
+        return true; // This part need to be reimplemented, causes an infinite loop
         $address = $this->checkoutSession->getQuote()->getShippingAddress();
 
         return (bool)preg_match('(^(\(?(((\+)|00)39)?\)?(3)(\d{8,9}))$)', (string)$address->getTelephone());
