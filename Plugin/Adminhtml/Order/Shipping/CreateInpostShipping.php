@@ -71,7 +71,6 @@ class CreateInpostShipping
                 $this->getCreatedShipment($orderId),
                 $packageOption
             );
-            $this->shippingStatusAction->processOrder($orderId);
         } catch (\Exception $e) {
             throw new \Exception("Unable to create InPost shipment: {$e->getMessage()}");
         }
