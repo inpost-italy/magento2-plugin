@@ -13,4 +13,9 @@ class PointData extends DataObject
 
         return "{$this->getName()}, {$addressDetails['street']}, {$addressDetails['building_number']} ({$this->getLocationDescription()})";
     }
+
+    public function getPointInfo() : string
+    {
+        return "{$this->getName()}, {$this->getLocationDescription()}";
+    }
 }
