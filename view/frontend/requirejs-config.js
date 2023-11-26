@@ -14,7 +14,13 @@ var config = {
             },
             'InPost_Shipment/js/inpostForm': {
                 'InPost_Shipment/js/mixin/amasty/update-shipping-rates-mixin': isAmastyEnabled !== undefined
-            }
+            },
+            'Magento_Checkout/js/view/shipping-information/address-renderer/default': {
+                'InPost_Shipment/js/mixin/view/shipping-information/address-renderer/default-mixin': true
+            },
+            'Magento_Checkout/js/view/shipping': {
+                'InPost_Shipment/js/mixin/view/shipping-mixin': true
+            },
         }
     }
 };

@@ -19,7 +19,7 @@ define([
                 template: 'InPost_Shipment/inpost-form.html'
             },
             config: window.checkoutConfig.inpost,
-            paymentMethodSelected: ko.observable(false),
+            shippingMethodSelected: ko.observable(false),
             selectedPoint: ko.observable(''),
             line1: ko.observable(''),
             line2: ko.observable(''),
@@ -37,6 +37,18 @@ define([
             selectedPointChanged: function(value) {
                 // Notify subscribers
                 return value;
+            },
+            getSelectedPoint: function() {
+                if (!this.shippingMethodSelected()) {
+                    return null;
+                }
+
+                return {
+                    pointid: this.selectedPoint(),
+                    address1: this.line1(),
+                    address2: this.line2(),
+                    openingHours: this.openingHours
+                }
             },
             initWidget: function (config) {
                 self = this;
@@ -73,7 +85,6 @@ define([
                     self.line2(point.address.line2);
                     self.openingHours(point.opening_hours);
                     self.postCode(point.address_details.post_code)
-                    console.log('change')
                     self.selectedPoint(point.name);
 
                    $('#easypack-map-modal-toggler').hide()

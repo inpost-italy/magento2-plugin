@@ -1,0 +1,19 @@
+<if args="point() && point().pointid">
+    InPost Locker: <i><text args="point().pointid"/></i><br>
+    Indirizzo: <i><b><text args="point().address1"/>, <text args="point().address2"/></b></i><br>
+    Aperto: <i><text args="point().openingHours"/></i>
+</if>
+
+<if args="!point() && visible()">
+    <text args="address().prefix"/> <text args="address().firstname"/> <text args="address().middlename"/>
+    <text args="address().lastname"/> <text args="address().suffix"/><br/>
+    <text args="_.values(address().street).join(', ')"/><br/>
+    <text args="address().city "/>, <span text="address().region"></span> <text args="address().postcode"/><br/>
+    <text args="getCountryName(address().countryId)"/><br/>
+    <a if="address().telephone" attr="'href': 'tel:' + address().telephone" text="address().telephone"></a><br/>
+
+    <each args="data: address().customAttributes, as: 'element'">
+        <text args="$parent.getCustomAttributeLabel(element)"/>
+        <br/>
+    </each>
+</if>

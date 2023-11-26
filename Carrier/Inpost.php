@@ -147,37 +147,18 @@ class Inpost extends AbstractCarrier implements CarrierInterface
             return $result;
         }
 
-        $pointInfo = $this->getPointInfo($request);
-
         $method = $this->rateMethodFactory->create();
         $method->setCarrier(self::CARRIER_CODE);
         $method->setMethod(self::ALLOWED_METHODS);
 
         $method->setCarrierTitle(self::CARRIER_TITLE );
-        $method->setMethodTitle($pointInfo ?: '');
+        $method->setMethodTitle('Locker');
         $method->setPrice($this->getConfigData('general/price'));
         $method->setCost($this->getConfigData('general/price'));
         $result->append($method);
 
         return $result;
     }
-
-    /**
-     * @param RateRequest $request
-     *
-     * @return array|null
-     */
-    private function getPointInfo(RateRequest $request): ?string
-    {
-        /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
-        $quoteItem = current($request->getAllItems());
-        if (!$quoteItem) {
-            return null;
-        }
-
-        return $this->pointsExtractor->getInpostPoint($quoteItem->getQuoteId());
-    }
-
 
     /**
      * Get allowed shipping methods
