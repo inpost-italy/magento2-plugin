@@ -5,38 +5,45 @@ namespace InPost\Shipment\Plugin\Adminhtml\Order\Shipping;
 use InPost\Shipment\Carrier\Inpost;
 use InPost\Shipment\Service\Management\ShipmentManager;
 use InPost\Shipment\Service\Order\ShippingStatusAction;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save;
 
 class CreateInpostShipping
 {
-    /**
-     * @var OrderRepository
-     */
-    private $orderRepository;
 
     /** @var ShipmentManager */
     private $createShipmentService;
 
-    /** @var ShippingStatusAction */
-    private $shippingStatusAction;
 
-    /**
-     * @param OrderRepository $orderRepository
-     * @param ShipmentManager $createShipmentService
-     * @param ShippingStatusAction $shippingStatusAction
-     */
+    private CollectionFactory $orderCollectionFactory;
+    private OrderRepository $orderRepository;
+    private \Magento\Framework\Message\ManagerInterface $messageManager;
+    private Shipment\TrackFactory $trackFactory;
+    private Order\ShipmentRepository $shipmentRepository;
+
     public function __construct(
         OrderRepository $orderRepository,
+        CollectionFactory $orderCollectionFactory,
+        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
         ShipmentManager $createShipmentService,
-        ShippingStatusAction $shippingStatusAction
+        Order\ShipmentRepository $shipmentRepository,
+        ShippingStatusAction $shippingStatusAction,
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
-        $this->orderRepository = $orderRepository;
+        $this->orderCollectionFactory = $orderCollectionFactory;
         $this->createShipmentService = $createShipmentService;
         $this->shippingStatusAction = $shippingStatusAction;
+        $this->orderRepository = $orderRepository;
+        $this->messageManager = $messageManager;
+        $this->trackFactory = $trackFactory;
+        $this->shipmentRepository = $shipmentRepository;
     }
 
     /**
@@ -65,26 +72,85 @@ class CreateInpostShipping
             throw new \Exception("Unable to create a shipment. An package options is missing");
         }
 
-        $result = $proceed();
+        $order = $this->getOrder($orderId);
+        // If point was provided from the form, use it, otherwise use the one from the order
+        $pointId = $request->getParam('inpost')['point_id'] ?? $order->getShippingAddress()->getInpostPointId();;
+
+
         try {
-            $this->createShipmentService->createShipment(
-                $this->getCreatedShipment($orderId),
+            $inpostShipment = $this->createShipmentService->createShipment(
+                $order,
+                $pointId,
                 $packageOption
             );
+
+            // Create a Magento shipment here
+            $result = $proceed();
+
+            $shipment = $this->getCreatedShipment($orderId);
+            $this->addTrack($shipment, $inpostShipment);
+            $this->addTrackingNumberToOrderShipment($shipment, (string) $inpostShipment->getId());
+
+        } catch (\InPost\Shipment\Service\Http\HttpClientException $e) {
+            return $this->redirectWithError($saveShipmentAction, $e->getReason());
         } catch (\Exception $e) {
-            throw new \Exception("Unable to create InPost shipment: {$e->getMessage()}");
+            return $this->redirectWithError($saveShipmentAction, $e->getMessage());
         }
+
 
         return $result;
     }
 
+    private function redirectWithError(Save $saveAction, string $error) : \Magento\Framework\App\ResponseInterface
+    {
+        $response = $saveAction->getResponse();
+        $request = $saveAction->getRequest();
+        $response->setRedirect($request->getHeader('referer'));
+
+        $this->messageManager->addErrorMessage("Unable to create InPost shipment: $error");
+
+        return $response;
+    }
+
     /**
-     * @param $orderId
+     * @param Shipment $shipment
+     * @param string $trackingNumber
      *
-     * @return Shipment
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * @return void
+     * @throws CouldNotSaveException
      */
+    private function addTrackingNumberToOrderShipment(Shipment $shipment, string $trackingNumber)
+    {
+        $shipment->setData('inpost_shipment_id', $trackingNumber);
+        $this->shipmentRepository->save($shipment);
+    }
+
+
+    private function getOrder($orderId): Order
+    {
+        $collection = $this->orderCollectionFactory->create();
+        $collection->addFieldToFilter('entity_id', $orderId);
+
+        return $collection->getFirstItem();
+    }
+
+    /**
+     * @param OrderShipment $shipment
+     * @param \InPost\Shipment\Api\Data\Shipment $inpostShipment
+     * @return void
+     */
+    private function addTrack(\Magento\Sales\Model\Order\Shipment $shipment, \InPost\Shipment\Api\Data\Shipment $inpostShipment)
+    {
+        $trackData = [
+            'carrier_code' => Inpost::CARRIER_CODE,
+            'title' => $inpostShipment->getService(),
+            'number' => $inpostShipment->getTrackingNumber()
+        ];
+
+        $track = $this->trackFactory->create()->addData($trackData);
+        $shipment->addTrack($track);
+    }
+
     private function getCreatedShipment($orderId): Shipment
     {
         $order = $this->orderRepository->get($orderId);

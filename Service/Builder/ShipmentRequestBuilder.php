@@ -55,7 +55,11 @@ class ShipmentRequestBuilder
         ]);
 
         $this->data->setReference($order->getIncrementId());
-        $this->addCustomAttribute('target_point', $address->getInpostPointId());
+    }
+
+    public function setTargetPointID(string $point): void
+    {
+        $this->addCustomAttribute('target_point', $point);
     }
 
     public function setSender(array $data): void
