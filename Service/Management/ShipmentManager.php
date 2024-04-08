@@ -116,6 +116,8 @@ class ShipmentManager
             'phone' => $this->configProvider->getMobilePhoneNumber(),
         ]);
         $builder->setParcels(['template' => $packageOption]);
+        $comment = 'Magento-' . ($this->configProvider->isDebugModeEnabled() ? 'staging' : 'production');
+        $builder->setComment($comment);
         $this->serviceProcessor->process($builder);
 
         return $builder;
