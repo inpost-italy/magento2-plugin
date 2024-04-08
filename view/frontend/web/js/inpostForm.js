@@ -24,6 +24,7 @@ define([
             line1: ko.observable(''),
             line2: ko.observable(''),
             openingHours: ko.observable(''),
+            city: ko.observable(''),
             postCode: ko.observable(''),
             isInstantiated: false,
             initialize: function () {
@@ -84,7 +85,8 @@ define([
                     self.line1(point.address.line1);
                     self.line2(point.address.line2);
                     self.openingHours(point.opening_hours);
-                    self.postCode(point.address_details.post_code)
+                    self.city(point.address_details.city);
+                    self.postCode(point.address_details.post_code);
                     self.selectedPoint(point.name);
 
                    $('#easypack-map-modal-toggler').hide()

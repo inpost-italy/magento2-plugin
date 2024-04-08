@@ -175,7 +175,9 @@ class InpostShipping
 
         return "<i>Point ID:</i> <b>{$pointData->getName()}</b><br>
             <i>Name:</i> {$pointData->getLocationDescription()},{$pointData->getLocationDescription1()}<br>
-            <i>Address:</i> {$addressDetails['street']} {$addressDetails['building_number']} </b><br>";
+            <i>City:</i> {$addressDetails['city']} </b><br>
+            <i>Address:</i> {$addressDetails['street']} {$addressDetails['building_number']} </b><br>
+            <i>Postcode:</i> {$addressDetails['post_code']}</b><br>";
     }
 
     /**
