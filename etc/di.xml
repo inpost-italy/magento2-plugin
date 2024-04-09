@@ -38,4 +38,9 @@
         </arguments>
     </type>
 
+    <type name="Magento\Shipping\Block\Tracking\Popup">
+        <plugin name="inpost_tracking_link"
+                type="InPost\Shipment\Plugin\Shipping\Block\Tracking\PopupPlugin"/>
+    </type>
+
 </config>

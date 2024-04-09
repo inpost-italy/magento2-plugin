@@ -23,6 +23,11 @@ class ConfigProvider
     const XML_PATH_INPOST_CREDENTIALS_MERCHANT_ID = 'carriers/inpost/credentials/merchant_id';
     const XML_PATH_INPOST_CREDENTIALS_API_KEY = 'carriers/inpost/credentials/api_key';
 
+    const XML_PATH_INPOST_RETURN_RETURN_URL = 'carriers/inpost/return/return_url';
+    const XML_PATH_INPOST_RETURN_RETURN_ALL = 'carriers/inpost/return/return_all';
+
+    const XML_PATH_INPOST_DELIVERY_OPTION_TRACKING_URL = 'carriers/inpost/delivery_options/tracking_url';
+
     const URL_SHIPX_STAGING = 'https://stage-api-shipx-it.easypack24.net';
     const URL_SHIPX_PRODUCTION = 'https://api-shipx-it.easypack24.net';
 
@@ -128,6 +133,16 @@ class ConfigProvider
 
     public function getReturnUrl(): ?string
     {
-        return $this->scopeConfig->getValue('carriers/inpost/return/return_url');
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_RETURN_RETURN_URL);
+    }
+
+    public function canReturnAll(): ?bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_INPOST_RETURN_RETURN_ALL);
+    }
+
+    public function getTrackingUrl(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_DELIVERY_OPTION_TRACKING_URL);
     }
 }

@@ -1,0 +1,13 @@
+<?php
+/* @var $block \InPost\Shipment\Block\Sales\Order\Returns */
+?>
+<div class="order-details-items inpost_returns">
+    <div class="actions-toolbar">
+        <div class="secondary">
+            <?= __('Click <a href="%1" class="action" target="_blank">here</a> and fill out the form to proceed with the return', $block->getReturnUrl()) ?>
+            <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                <span><?= $block->escapeHtml($block->getBackTitle()) ?></span>
+            </a>
+        </div>
+    </div>
+</div>
