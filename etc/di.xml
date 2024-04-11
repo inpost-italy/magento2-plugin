@@ -25,8 +25,6 @@
                 type="InPost\Shipment\Plugin\Adminhtml\Order\Shipping\PdfPrintAction"/>
     </type>
 
-    <preference for="Magento\Sales\Block\Order\History" type="InPost\Shipment\Block\Sales\Order\History" />
-
     <type name="InPost\Shipment\Validation\ValidatorPool">
         <arguments>
             <argument name="validators" xsi:type="array">
