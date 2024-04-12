@@ -1,0 +1,29 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="data-grid-cell-content">
+
+    <a if="$col.getTooltipValue($row(), 'url')" data-bind="attr: { href: $col.getTooltipValue($row(), 'url') }, text: $col.getTooltipValue($row(), 'tracking_number')" target="_blank"></a>
+    <br if="$col.getTooltipValue($row(), 'url')" />
+    <span text="$col.getTooltipValue($row(), 'content')"></span>
+    <div if="$col.isExpandable($row())" class="admin__control-short-label admin__field-tooltip" style="margin-top: -0.3rem;">
+        <a class="admin__field-tooltip-action action-help" attr="'data-tooltip-trigger': ++ko.uid"></a>
+        <div
+            tooltip="
+                tooltipClasses: 'data-grid-column-tooltip admin__field-tooltip-content',
+                trigger: '[data-tooltip-trigger=' + ko.uid + ']',
+                action: 'click',
+                delay: 0,
+                center: true,
+                position: 'top',
+                closeButton: true,
+                closeOnScroll: false
+            ">
+            <div render="$data.tooltipTmpl"></div>
+        </div>
+    </div>
+</div>
