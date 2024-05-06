@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "1.5.0",
     "name": "inpost-italy/magento2-plugin",
     "description": "Magento 2 module for Inpost IT integration",
     "type": "magento2-module",
