@@ -5,9 +5,9 @@ use InPost\Shipment\Carrier\Inpost;
 use InPost\Shipment\Config\ConfigProvider;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
-use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\Order\ShipmentRepository;
+use Magento\Sales\Model\OrderRepository;
 use Magento\Shipping\Block\Tracking\Popup;
-use Magento\Shipping\Model\Info;
 use Magento\Shipping\Model\InfoFactory;
 use Magento\Shipping\Model\Order\Track;
 use Magento\Shipping\Model\Order\TrackFactory;
@@ -30,9 +30,14 @@ class PopupPlugin
     protected TrackFactory $trackFactory;
 
     /**
-     * @var OrderFactory
+     * @var OrderRepository
      */
-    protected $orderFactory;
+    protected OrderRepository $orderRepository;
+
+    /**
+     * @var ShipmentRepository
+     */
+    protected ShipmentRepository $shipmentRepository;
 
     /**
      * @var SecureHtmlRenderer
@@ -48,7 +53,8 @@ class PopupPlugin
      * @param InfoFactory $shippingInfoFactory
      * @param RequestInterface $request
      * @param TrackFactory $trackFactory
-     * @param OrderFactory $orderFactory
+     * @param OrderRepository $orderRepository
+     * @param ShipmentRepository $shipmentRepository
      * @param SecureHtmlRenderer $secureRenderer
      * @param ConfigProvider $configProvider
      */
@@ -56,7 +62,8 @@ class PopupPlugin
         InfoFactory $shippingInfoFactory,
         RequestInterface $request,
         TrackFactory $trackFactory,
-        OrderFactory $orderFactory,
+        OrderRepository $orderRepository,
+        ShipmentRepository $shipmentRepository,
         SecureHtmlRenderer $secureRenderer,
         ConfigProvider $configProvider
     )
@@ -64,7 +71,8 @@ class PopupPlugin
         $this->shippingInfoFactory = $shippingInfoFactory;
         $this->request = $request;
         $this->trackFactory = $trackFactory;
-        $this->orderFactory = $orderFactory;
+        $this->orderRepository = $orderRepository;
+        $this->shipmentRepository = $shipmentRepository;
         $this->secureRenderer = $secureRenderer;
         $this->configProvider = $configProvider;
     }
@@ -74,28 +82,43 @@ class PopupPlugin
         $shippingInfoModel = $this->shippingInfoFactory->create()->loadByHash($this->request->getParam('hash'));
         if($shippingInfoModel->getOrderId())
         {
-            $order = $this->orderFactory->create()->load($shippingInfoModel->getOrderId());
-            if(strpos($order->getShippingMethod(), Inpost::CARRIER_CODE) !== false)
-            {
-                foreach ($order->getShipmentsCollection() as $shipment)
+            try {
+                $order = $this->orderRepository->get($shippingInfoModel->getOrderId());
+                if(strpos($order->getShippingMethod(), Inpost::CARRIER_CODE) !== false)
                 {
-                    foreach ($shipment->getTracks() as $track)
+                    foreach ($order->getShipmentsCollection() as $shipment)
                     {
-                        return $this->closePupupAndLink($track->getTrackNumber());
+                        foreach ($shipment->getTracks() as $track)
+                        {
+                            return $this->closePupupAndLink($track->getTrackNumber());
+                        }
                     }
-
                 }
-
             }
+            catch (\Exception $e) {}
+        }
+        if($shippingInfoModel->getShipId())
+        {
+            try {
+                $shipment = $this->shipmentRepository->get($shippingInfoModel->getShipId());
+                foreach ($shipment->getTracks() as $track)
+                {
+                    return $this->closePupupAndLink($track->getTrackNumber());
+                }
+            }
+            catch (\Exception $e) {}
         }
         if($shippingInfoModel->getTrackId())
         {
-            /** @var Track $track */
-            $track = $this->trackFactory->create()->load($shippingInfoModel->getTrackId());
-            if($track->getCarrierCode() && (strpos($track->getCarrierCode(), Inpost::CARRIER_CODE) !== false))
-            {
-                return $this->closePupupAndLink($track->getTrackNumber());
+            try {
+                /** @var Track $track */
+                $track = $this->trackFactory->create()->load($shippingInfoModel->getTrackId());
+                if($track->getCarrierCode() && (strpos($track->getCarrierCode(), Inpost::CARRIER_CODE) !== false))
+                {
+                    return $this->closePupupAndLink($track->getTrackNumber());
+                }
             }
+            catch (\Exception $e) {}
         }
         return $proceed();
     }
