@@ -44,4 +44,16 @@ class TrackingService
 
         return new TrackingData($data);
     }
+
+    public function getTrackingStatuses()
+    {
+        $client = $this->httpClientFactory->create();
+
+        $response = $client->get(
+            "{$this->configProvider->getShipXBaseUrl()}/v1/statuses"
+        );
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        return $data;
+    }
 }

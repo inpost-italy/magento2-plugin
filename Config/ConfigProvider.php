@@ -23,6 +23,10 @@ class ConfigProvider
     const XML_PATH_INPOST_CREDENTIALS_MERCHANT_ID = 'carriers/inpost/credentials/merchant_id';
     const XML_PATH_INPOST_CREDENTIALS_API_KEY = 'carriers/inpost/credentials/api_key';
 
+    const XML_PATH_INPOST_AUTOMATIONS_ORDER_CAN_CLOSE_ORDER = 'carriers/inpost/automations/order/can_close_orders';
+    const XML_PATH_INPOST_AUTOMATIONS_ORDER_TRACKING_STATUS = 'carriers/inpost/automations/order/tracking_status';
+    const XML_PATH_INPOST_AUTOMATIONS_ORDER_ORDER_STATUS = 'carriers/inpost/automations/order/order_status';
+
     const URL_SHIPX_STAGING = 'https://stage-api-shipx-it.easypack24.net';
     const URL_SHIPX_PRODUCTION = 'https://api-shipx-it.easypack24.net';
 
@@ -126,8 +130,35 @@ class ConfigProvider
         return $this->scopeConfig->getValue(self::XML_PATH_INPOST_CREDENTIALS_API_KEY);
     }
 
+    /**
+     * @return string|null
+     */
     public function getReturnUrl(): ?string
     {
         return $this->scopeConfig->getValue('carriers/inpost/return/return_url');
+    }
+
+    /**
+     * @return bool
+     */
+    public function canCloseOrder(): bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_INPOST_AUTOMATIONS_ORDER_CAN_CLOSE_ORDER);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTrackingStatusToCloseOrder(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_AUTOMATIONS_ORDER_TRACKING_STATUS);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStatusToCloseOrder(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_AUTOMATIONS_ORDER_ORDER_STATUS);
     }
 }

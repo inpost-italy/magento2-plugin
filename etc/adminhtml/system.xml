@@ -172,6 +172,33 @@
                     </field>
                 </group>
 
+                <group id="automations" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Automations</label>
+                    <group id="order" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Order</label>
+                        <field id="can_close_orders" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
+                            <label>Automatically Close Order</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="tracking_status" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                               showInStore="1">
+                            <label>Tracking Status To Close Order</label>
+                            <depends>
+                                <field id="can_close_orders">1</field>
+                            </depends>
+                            <source_model>InPost\Shipment\Model\Config\Source\Tracking\Status</source_model>
+                        </field>
+                        <field id="order_status" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                               showInStore="1">
+                            <label>Order Status</label>
+                            <depends>
+                                <field id="can_close_orders">1</field>
+                            </depends>
+                            <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                        </field>
+                    </group>
+                </group>
+
                 <group id="widget" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Widget settings</label>
                     <field id="map_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
