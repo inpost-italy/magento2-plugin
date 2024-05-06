@@ -13,4 +13,18 @@
             </action>
         </massaction>
     </listingToolbar>
+    <columns name="sales_order_columns">
+        <column name="inpost_status" class="InPost\Shipment\Ui\Component\Listing\Column\Status">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">InPost_Shipment/js/grid/columns/tooltip</item>
+                    <item name="tooltipTitle" xsi:type="string"></item>
+                    <item name="visibeItemsLimit" xsi:type="number">1</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="fieldAction" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">InPost Status</item>
+                </item>
+            </argument>
+        </column>
+    </columns>
 </listing>
