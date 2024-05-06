@@ -77,6 +77,11 @@ class ShipmentRequestBuilder
         $this->data->setService($service);
     }
 
+    public function setComment($comment): void
+    {
+        $this->data->setComment($comment);
+    }
+
     public function addCustomAttribute($attribute, $value): void
     {
         $data = $this->data->getCustomAttributes() ?? [];
