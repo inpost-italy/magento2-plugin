@@ -20,6 +20,9 @@
                 <flow>
                     <type>inpost_locker_standard</type>
                 </flow>
+                <delivery_options>
+                    <tracking_url>https://inpost.it/trova-il-tuo-pacco?number={{tracknumber}}</tracking_url>
+                </delivery_options>
             </inpost>
         </carriers>
     </default>

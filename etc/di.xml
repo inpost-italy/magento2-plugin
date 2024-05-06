@@ -37,8 +37,6 @@
                 type="InPost\Shipment\Plugin\Adminhtml\Order\Shipping\PdfPrintAction"/>
     </type>
 
-    <preference for="Magento\Sales\Block\Order\History" type="InPost\Shipment\Block\Sales\Order\History" />
-
     <type name="InPost\Shipment\Validation\ValidatorPool">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -48,6 +46,11 @@
                 <item name="phone_validation" xsi:type="object">InPost\Shipment\Validation\Validator\PhoneValidation</item>
             </argument>
         </arguments>
+    </type>
+
+    <type name="Magento\Shipping\Block\Tracking\Popup">
+        <plugin name="inpost_tracking_link"
+                type="InPost\Shipment\Plugin\Shipping\Block\Tracking\PopupPlugin"/>
     </type>
 
 </config>

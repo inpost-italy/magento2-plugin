@@ -43,6 +43,7 @@ PDF,PDF
 "Opening hours:","Opening hours:"
 Remove,Remove
 "This is a required field.","This is a required field."
+"Click <a href="%1" class="action" target="_blank">here</a> and fill out the form to proceed with the return","Click <a href="%1" class="action" target="_blank">here</a> and fill out the form to proceed with the return"
 "Parcel created.","Parcel created."
 "Parcel created, but not ready for shipment.","Parcel created, but not ready for shipment."
 "Prepared by the Sender.","Prepared by the Sender."

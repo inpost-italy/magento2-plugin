@@ -205,6 +205,11 @@
                             <field id="return_enable">1</field>
                         </depends>
                     </field>
+
+                    <field id="return_all" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
+                        <label>Allow returns for all orders</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
                 </group>
             </group>
         </section>

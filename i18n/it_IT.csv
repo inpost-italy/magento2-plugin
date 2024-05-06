@@ -56,6 +56,7 @@ Remove,Rimuovi
 "Building n.", "Numero"
 "City", "Città"
 "Post code", "Codice Postale"
+"Click <a href="%1" class="action" target="_blank">here</a> and fill out the form to proceed with the return","Clicca <a href="%1" class="action" target="_blank">qui</a> e compila il form per procedere al reso"
 "Parcel created.","Pacco creato."
 "Parcel created, but not ready for shipment.","Pacco creato, ma non pronto per la spedizione."
 "Prepared by the Sender.","Preparato dal mittente."
