@@ -112,7 +112,7 @@ class OrderManager
                                     }
                                     catch (\Exception $e)
                                     {
-                                        $this->logger->error('    ' . $e->getMessage());
+                                        $this->logger->error('    ' . trim($e->getMessage()));
                                     }
                                 }
                             }
@@ -126,12 +126,21 @@ class OrderManager
 
     public function getCollection(): Collection
     {
-        $trackingStatusToCloseOrder = $this->configProvider->getTrackingStatusToCloseOrder();
-        return $this->orderCollectionFactory->create()
-            ->addFieldToFilter('status',
-                ['nin' => [Order::STATE_CANCELED, Order::STATE_HOLDED, $trackingStatusToCloseOrder]]
+        $collection = $this->orderCollectionFactory->create();
+        $status = $this->configProvider->getStatusToCloseOrder();
+        if($status)
+        {
+            $collection->addFieldToFilter('status',
+                ['nin' => [Order::STATE_CANCELED, Order::STATE_HOLDED, $status]]
             )
             ->addFieldToFilter('shipping_method', ['like' => '%' . Inpost::CARRIER_CODE . '%']);
+        }
+        else
+        {
+            $collection->addFieldToFilter('status', 'null');
+        }
+
+        return $collection;
     }
 
     /**
@@ -147,6 +156,7 @@ class OrderManager
         {
             $order->setStatus($status);
             $order->setState($status);
+            $order->setForceInpostStatus(true);
             $this->orderRepository->save($order);
             $this->logger->info('    Set Order Status: ' . $status);
         }

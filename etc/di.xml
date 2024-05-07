@@ -53,6 +53,11 @@
                 type="InPost\Shipment\Plugin\Shipping\Block\Tracking\PopupPlugin"/>
     </type>
 
+    <type name="Magento\Sales\Model\ResourceModel\Order\Handler\State">
+        <plugin name="inpost_force_order_status"
+                type="InPost\Shipment\Plugin\Order\Model\Handler\StatePlugin"/>
+    </type>
+
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
