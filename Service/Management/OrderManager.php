@@ -1,6 +1,7 @@
 <?php
 namespace InPost\Shipment\Service\Management;
 
+use InPost\Shipment\Carrier\Inpost;
 use InPost\Shipment\Config\ConfigProvider;
 use InPost\Shipment\Logger\Logger;
 use InPost\Shipment\Service\Api\TrackingService;
@@ -111,7 +112,7 @@ class OrderManager
                                     }
                                     catch (\Exception $e)
                                     {
-                                        $this->logger->error($e->getMessage());
+                                        $this->logger->error('    ' . $e->getMessage());
                                     }
                                 }
                             }
@@ -125,9 +126,12 @@ class OrderManager
 
     public function getCollection(): Collection
     {
+        $trackingStatusToCloseOrder = $this->configProvider->getTrackingStatusToCloseOrder();
         return $this->orderCollectionFactory->create()
-            ->addFieldToFilter('status', ['in' => ['pending', 'processing', 'shipping']])
-            ->addFieldToFilter('shipping_method', ['like' => '%inpost%']);
+            ->addFieldToFilter('status',
+                ['nin' => [Order::STATE_CANCELED, Order::STATE_HOLDED, $trackingStatusToCloseOrder]]
+            )
+            ->addFieldToFilter('shipping_method', ['like' => '%' . Inpost::CARRIER_CODE . '%']);
     }
 
     /**
