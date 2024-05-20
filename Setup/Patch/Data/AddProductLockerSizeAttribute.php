@@ -56,7 +56,7 @@ class AddProductLockerSizeAttribute implements DataPatchInterface
             Product::ENTITY,
             self::ATTRIBUTE_CODE,
             [
-                'type' => 'varchar',
+                'type' => 'int',
                 'label' => self::ATTRIBUTE_LABEL,
                 'input' => 'select',
                 'source' => LockerSize::class,

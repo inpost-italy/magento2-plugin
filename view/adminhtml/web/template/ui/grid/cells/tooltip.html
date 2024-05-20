@@ -26,4 +26,9 @@
             <div render="$data.tooltipTmpl"></div>
         </div>
     </div>
+
+    <div ifnot="$col.getTooltipValue($row(), 'url')">
+        <span text="$col.getTooltipValue($row(), 'tracking_number')"></span>
+    </div>
+
 </div>

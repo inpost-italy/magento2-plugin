@@ -25,7 +25,7 @@
                 </delivery_options>
                 <automations>
                     <product>
-                        <inpost_locker_size>S</inpost_locker_size>
+                        <inpost_locker_size>1</inpost_locker_size>
                     </product>
                 </automations>
             </inpost>

@@ -12,9 +12,12 @@ use Magento\Framework\Data\OptionSourceInterface;
 class LockerSize extends AbstractSource implements OptionSourceInterface, SourceInterface
 {
     const UNDEFINED_OPTION_LABEL = '-- Please Select --';
-    const LOCKER_SIZE_S = 'S';
-    const LOCKER_SIZE_M = 'M';
-    const LOCKER_SIZE_L = 'L';
+    const LOCKER_SIZE_S_VALUE = 1;
+    const LOCKER_SIZE_M_VALUE = 2;
+    const LOCKER_SIZE_L_VALUE = 3;
+    const LOCKER_SIZE_S_LABEL = 'small';
+    const LOCKER_SIZE_M_LABEL = 'medium';
+    const LOCKER_SIZE_L_LABEL = 'large';
     /**
      * @return array
      */
@@ -23,9 +26,9 @@ class LockerSize extends AbstractSource implements OptionSourceInterface, Source
         if (!$this->_options) {
             $this->_options = [
                 ['value' => '', 'label' => __(self::UNDEFINED_OPTION_LABEL)],
-                ['value' => self::LOCKER_SIZE_S, 'label' => __('Small')],
-                ['value' => self::LOCKER_SIZE_M, 'label' => __('Medium')],
-                ['value' => self::LOCKER_SIZE_L, 'label' => __('Large')],
+                ['value' => self::LOCKER_SIZE_S_VALUE, 'label' => __(ucfirst(self::LOCKER_SIZE_S_LABEL))],
+                ['value' => self::LOCKER_SIZE_M_VALUE, 'label' => __(ucfirst(self::LOCKER_SIZE_M_LABEL))],
+                ['value' => self::LOCKER_SIZE_L_VALUE, 'label' => __(ucfirst(self::LOCKER_SIZE_L_LABEL))],
             ];
         }
         return $this->_options;
