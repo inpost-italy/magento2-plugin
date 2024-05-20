@@ -64,6 +64,17 @@ class GetLabelService
 
         $client->setAuthToken($apiKey);
 
+        /*
+            PDF A6
+            /v1/shipments/:shipment_id/label?type=A6&format=pdf
+            PDF A4
+            /v1/shipments/:shipment_id/label?type=normal&format=pdf
+            ZPL 203 DPI
+            /v1/shipments/:shipment_id/label?type=A6&format=zpl
+            ZPL in 300 DPI
+            /v1/shipments/:shipment_id/label?type=dpi300&format=zpl
+         */
+
         $response = $client->get(
             $this->configProvider->getShipXBaseUrl() . "/v1/shipments/{$inpostShipmentId}/label",
             ["type" => $this->configProvider->getLabelType(), "format" => $this->configProvider->getLabelFormat()]
