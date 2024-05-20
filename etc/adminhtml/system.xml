@@ -148,10 +148,6 @@
                     </field>
                 </group>
 
-                <group id="pdfconfig" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>PDF</label>
-                </group>
-
                 <group id="delivery_options" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Delivery options</label>
                     <field id="max_item_weight" translate="label" type="text" sortOrder="290" showInDefault="1"
@@ -170,6 +166,25 @@
                         <label>Max Total Cart Wight</label>
                         <comment>Leave empty or 0 to ignore this setting.</comment>
                     </field>
+                </group>
+
+                <group id="widget" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Widget settings</label>
+                    <field id="map_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                           showInStore="1">
+                        <label>Map type</label>
+                        <source_model>InPost\Shipment\Config\Source\MapSources</source_model>
+                    </field>
+
+                    <field id="gmaps_api_key" translate="label" type="text" sortOrder="1" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <label>Google Maps API key</label>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="map_type">google</field>
+                        </depends>
+                    </field>
+
                 </group>
 
                 <group id="automations" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
@@ -207,23 +222,12 @@
                     </group>
                 </group>
 
-                <group id="widget" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Widget settings</label>
-                    <field id="map_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
-                           showInStore="1">
-                        <label>Map type</label>
-                        <source_model>InPost\Shipment\Config\Source\MapSources</source_model>
+                <group id="labels" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Labels</label>
+                    <field id="format_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
+                        <label>Type</label>
+                        <source_model>InPost\Shipment\Model\Config\Source\Labels\FormatType</source_model>
                     </field>
-
-                    <field id="gmaps_api_key" translate="label" type="text" sortOrder="1" showInDefault="1"
-                           showInWebsite="1" showInStore="1">
-                        <label>Google Maps API key</label>
-                        <validate>required-entry</validate>
-                        <depends>
-                            <field id="map_type">google</field>
-                        </depends>
-                    </field>
-
                 </group>
 
                 <group id="return" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
