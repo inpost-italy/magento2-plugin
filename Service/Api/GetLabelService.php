@@ -66,7 +66,7 @@ class GetLabelService
 
         $response = $client->get(
             $this->configProvider->getShipXBaseUrl() . "/v1/shipments/{$inpostShipmentId}/label",
-            []
+            ["type" => $this->configProvider->getLabelType(), "format" => $this->configProvider->getLabelFormat()]
         );
 
         return [$this->storeFile($response->getBody(), 'shipment_' . $shipment->getIncrementId())];
@@ -147,7 +147,7 @@ class GetLabelService
      */
     protected function storeFile($fileContent, $fileName): string
     {
-        $fileName .= '.pdf';
+        $fileName .= '.' .$this->configProvider->getLabelFormat();
         $folderPath = $this->filesystem->getDirectoryRead(DirectoryList::TMP)->getAbsolutePath();
 
         if (!$this->file->isDirectory($folderPath)) {

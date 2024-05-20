@@ -20,6 +20,9 @@
                 <flow>
                     <type>inpost_locker_standard</type>
                 </flow>
+                <labels>
+                    <format_type>pdf_a6</format_type>
+                </labels>
                 <delivery_options>
                     <tracking_url>https://inpost.it/trova-il-tuo-pacco?number={{tracknumber}}</tracking_url>
                 </delivery_options>
