@@ -27,10 +27,11 @@
                 </div>
 
                 <div data-bind="if: selectedPoint" style="padding-top: 3px;">
-                    <strong data-bind="i18n: 'Name:'"></strong> <span data-bind="text: selectedPoint"></span><br>
-                    <strong data-bind="i18n: 'Address:'"></strong> <span class="point-address" data-bind="text: line1"></span><br>
-                    <strong data-bind="i18n: 'Postcode:'"></strong> <span class="point-postcode" data-bind="text: postCode"></span><br>
-                    <strong data-bind="i18n: 'Opening hours:'"></strong> <span class="point-opening-hours" data-bind="text: openingHours"></span><br>
+                    <strong data-bind="i18n: 'Name'"></strong>: <span data-bind="text: selectedPoint"></span><br>
+                    <strong data-bind="i18n: 'City'"></strong>: <span class="point-city" data-bind="text: city"></span><br>
+                    <strong data-bind="i18n: 'Address'"></strong>: <span class="point-address" data-bind="text: line1"></span><br>
+                    <strong data-bind="i18n: 'Postcode'"></strong>: <span class="point-postcode" data-bind="text: postCode"></span><br>
+                    <strong data-bind="i18n: 'Opening hours'"></strong>: <span class="point-opening-hours" data-bind="text: openingHours"></span><br>
                     <a href="#" id="remove-selected-point"
                        data-bind="click: openInPostModal, i18n: 'CHANGE COLLECTION POINT'"></a>
                 </div>

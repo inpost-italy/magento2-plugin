@@ -1,10 +1,24 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="InPost_Shipment::print_inpost_labels"
-             title="Print Inpost Labels"
+        <add id="InPost_Shipment::inpost"
+             title="InPost"
              translate="title"
              module="InPost_Shipment"
-             sortOrder="100"
-             resource="Magento_Sales::sales_order"/>
+             sortOrder="69"
+             resource="InPost_Shipment::inpost"/>
+        <add id="InPost_Shipment::general"
+             title="InPost"
+             translate="title"
+             module="InPost_Shipment"
+             sortOrder="10"
+             parent="InPost_Shipment::inpost"
+             resource="InPost_Shipment::general" />
+        <add id="InPost_Shipment::settings"
+             title="Settings"
+             module="InPost_Shipment"
+             sortOrder="10"
+             parent="InPost_Shipment::general"
+             action="admin/system_config/edit/section/carriers"
+             resource="InPost_Shipment::settings"/>
     </menu>
 </config>

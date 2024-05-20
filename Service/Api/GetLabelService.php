@@ -64,9 +64,20 @@ class GetLabelService
 
         $client->setAuthToken($apiKey);
 
+        /*
+            PDF A6
+            /v1/shipments/:shipment_id/label?type=A6&format=pdf
+            PDF A4
+            /v1/shipments/:shipment_id/label?type=normal&format=pdf
+            ZPL 203 DPI
+            /v1/shipments/:shipment_id/label?type=A6&format=zpl
+            ZPL in 300 DPI
+            /v1/shipments/:shipment_id/label?type=dpi300&format=zpl
+         */
+
         $response = $client->get(
             $this->configProvider->getShipXBaseUrl() . "/v1/shipments/{$inpostShipmentId}/label",
-            []
+            ["type" => $this->configProvider->getLabelType(), "format" => $this->configProvider->getLabelFormat()]
         );
 
         return [$this->storeFile($response->getBody(), 'shipment_' . $shipment->getIncrementId())];
@@ -147,7 +158,7 @@ class GetLabelService
      */
     protected function storeFile($fileContent, $fileName): string
     {
-        $fileName .= '.pdf';
+        $fileName .= '.' .$this->configProvider->getLabelFormat();
         $folderPath = $this->filesystem->getDirectoryRead(DirectoryList::TMP)->getAbsolutePath();
 
         if (!$this->file->isDirectory($folderPath)) {

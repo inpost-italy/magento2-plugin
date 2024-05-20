@@ -42,6 +42,36 @@ class TrackingService
         );
         $data = json_decode($response->getBody()->getContents(), true);
 
+        if($data['status'])
+        {
+            $data['status'] = $this->getTrackingStatusDetails($data['status']);
+        }
+
         return new TrackingData($data);
     }
+
+    public function getTrackingStatuses()
+    {
+        $client = $this->httpClientFactory->create();
+
+        $response = $client->get(
+            "{$this->configProvider->getShipXBaseUrl()}/v1/statuses"
+        );
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        return $data;
+    }
+
+    public function getTrackingStatusDetails(string $status)
+    {
+        $trackingStatuses = $this->getTrackingStatuses();
+        foreach ($trackingStatuses['items'] as $trackingStatus)
+        {
+            if($trackingStatus['name'] == $status)
+            {
+                return $trackingStatus;
+            }
+        }
+    }
+
 }

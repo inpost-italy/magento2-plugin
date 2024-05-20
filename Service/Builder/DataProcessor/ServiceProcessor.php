@@ -35,5 +35,7 @@ class ServiceProcessor implements \InPost\Shipment\Service\Builder\DataProcessor
             'phone' => $this->configProvider->getMobilePhoneNumber(),
             'address' => $this->configProvider->getSenderAddress()
         ]);
+        $comment = 'Magento-' . ($this->configProvider->isDebugModeEnabled() ? 'staging' : 'production');
+        $builder->setComment($comment);
     }
 }

@@ -2,8 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="inpost" translate="label" sortOrder="200">
-            <label>inpost</label>
+        <tab id="inpost" translate="label" sortOrder="9999" class="inpost">
+            <label>InPost</label>
         </tab>
         <section id="carriers" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1"
                  showInStore="1">
@@ -148,10 +148,6 @@
                     </field>
                 </group>
 
-                <group id="pdfconfig" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>PDF</label>
-                </group>
-
                 <group id="delivery_options" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Delivery options</label>
                     <field id="max_item_weight" translate="label" type="text" sortOrder="290" showInDefault="1"
@@ -191,6 +187,49 @@
 
                 </group>
 
+                <group id="automations" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Automations</label>
+                    <group id="order" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Order</label>
+                        <field id="can_close_orders" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
+                            <label>Automatically Close Order</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="tracking_status" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                               showInStore="1">
+                            <label>Tracking Status To Close Order</label>
+                            <depends>
+                                <field id="can_close_orders">1</field>
+                            </depends>
+                            <source_model>InPost\Shipment\Model\Config\Source\Tracking\Status</source_model>
+                        </field>
+                        <field id="order_status" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                               showInStore="1">
+                            <label>Order Status</label>
+                            <depends>
+                                <field id="can_close_orders">1</field>
+                            </depends>
+                            <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                        </field>
+                    </group>
+                    <group id="product" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Product</label>
+                        <field id="inpost_locker_size" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                               showInStore="1">
+                            <label>Default Locker Size</label>
+                            <source_model>InPost\Shipment\Model\Config\Source\Product\LockerSize</source_model>
+                        </field>
+                    </group>
+                </group>
+
+                <group id="labels" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Labels</label>
+                    <field id="format_type" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
+                        <label>Type</label>
+                        <source_model>InPost\Shipment\Model\Config\Source\Labels\FormatType</source_model>
+                    </field>
+                </group>
+
                 <group id="return" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Returns</label>
 
@@ -204,6 +243,11 @@
                         <depends>
                             <field id="return_enable">1</field>
                         </depends>
+                    </field>
+
+                    <field id="return_all" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1">
+                        <label>Allow returns for all orders</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
             </group>

@@ -4,7 +4,19 @@
 
     <type name="Magento\Checkout\Model\ShippingInformationManagement">
         <plugin name="inpost_shippinginformation_extension_attribute"
-                type="\InPost\Shipment\Plugin\Checkout\Model\ShippingInformationManagementPlugin"
+                type="InPost\Shipment\Plugin\Checkout\Model\ShippingInformationManagementPlugin"
+                sortOrder="1" />
+    </type>
+
+    <type name="Magento\Checkout\Model\PaymentInformationManagement">
+        <plugin name="inpost_paymentinformation_change_shipping_address_with_inpost_point"
+                type="InPost\Shipment\Plugin\Checkout\Model\PaymentInformationManagementPlugin"
+                sortOrder="1" />
+    </type>
+
+    <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
+        <plugin name="inpost_guestpaymentinformation_change_shipping_address_with_inpost_point"
+                type="InPost\Shipment\Plugin\Checkout\Model\GuestPaymentInformationManagementPlugin"
                 sortOrder="1" />
     </type>
 
@@ -25,8 +37,6 @@
                 type="InPost\Shipment\Plugin\Adminhtml\Order\Shipping\PdfPrintAction"/>
     </type>
 
-    <preference for="Magento\Sales\Block\Order\History" type="InPost\Shipment\Block\Sales\Order\History" />
-
     <type name="InPost\Shipment\Validation\ValidatorPool">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -34,6 +44,40 @@
                 <item name="weight_validation" xsi:type="object">InPost\Shipment\Validation\Validator\WeightLimits</item>
                 <item name="category_validation" xsi:type="object">InPost\Shipment\Validation\Validator\CategoryDeliverySettings</item>
                 <item name="phone_validation" xsi:type="object">InPost\Shipment\Validation\Validator\PhoneValidation</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Shipping\Block\Tracking\Popup">
+        <plugin name="inpost_tracking_link"
+                type="InPost\Shipment\Plugin\Shipping\Block\Tracking\PopupPlugin"/>
+    </type>
+
+    <type name="Magento\Sales\Model\ResourceModel\Order\Handler\State">
+        <plugin name="inpost_force_order_status"
+                type="InPost\Shipment\Plugin\Order\Model\Handler\StatePlugin"/>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="inpost_shipment_close_orders" xsi:type="object">
+                    InPost\Shipment\Console\Command\CloseOrders
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="InPost\Shipment\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="InPost\Shipment\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">logger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">InPost\Shipment\Logger\Handler</item>
             </argument>
         </arguments>
     </type>

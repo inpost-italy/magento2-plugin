@@ -1,0 +1,12 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__tooltip-title" if="$data.tooltipTitle.length">
+    <span translate="$data.tooltipTitle"></span>
+</div>
+<div style="width: 400px;" if="$col.getTooltipValue($row(), 'description').length">
+    <span translate="$col.getTooltipValue($row(), 'description')"></span>
+</div>

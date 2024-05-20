@@ -1,7 +1,7 @@
 <if args="point() && point().pointid">
-    InPost Locker: <i><text args="point().pointid"/></i><br>
-    Indirizzo: <i><b><text args="point().address1"/>, <text args="point().address2"/></b></i><br>
-    Aperto: <i><text args="point().openingHours"/></i>
+    <span data-bind="i18n: 'InPost Locker'"></span>: <i><text args="point().pointid"/></i><br>
+    <span data-bind="i18n: 'Address'"></span>: <i><b><text args="point().address1"/></b></i>, <i><b><text args="point().address2"/></b></i><br>
+    <span data-bind="i18n: 'Opening hours'"></span>: <i><text args="point().openingHours"/></i>
 </if>
 
 <if args="!point() && visible()">
