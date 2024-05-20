@@ -73,20 +73,18 @@ class Status extends Column
                                  * @var Track $track
                                  */
                                 $trackingNumber = $track->getTrackNumber();
+                                $options['tracking_number'] = $trackingNumber;
                                 try {
                                     $trackingStatus = $this->trackingService->getTracking($trackingNumber);
                                     if($trackingStatus->getStatus())
                                     {
-                                        $options = [
-                                            'content' => __($trackingStatus->getStatus()['title']),
-                                            'tracking_number' => $trackingNumber,
-                                            'url' => $trackingStatus->getUrl(),
-                                            'description' => __($trackingStatus->getStatus()['description'])
-                                        ];
-                                        $item[$this->getData('name')] = json_encode($options);
+                                        $options['content'] = __($trackingStatus->getStatus()['title']);
+                                        $options['url'] = $trackingStatus->getUrl();
+                                        $options['description'] = __($trackingStatus->getStatus()['description']);
                                     }
                                 }
                                 catch (\Exception $e) {}
+                                $item[$this->getData('name')] = json_encode($options);
                             }
                         }
                     }

@@ -11,6 +11,15 @@
                     </item>
                 </argument>
             </action>
+            <action name="mass_inpost_create_shipping_action">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">inpost_create_shipping_action</item>
+                        <item name="label" xsi:type="string" translate="true">Create InPost Shipment</item>
+                        <item name="url" xsi:type="url" path="inpost_shipment/order/massCreateInpostShipping"/>
+                    </item>
+                </argument>
+            </action>
         </massaction>
     </listingToolbar>
     <columns name="sales_order_columns">

@@ -2,8 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="inpost" translate="label" sortOrder="200">
-            <label>inpost</label>
+        <tab id="inpost" translate="label" sortOrder="9999" class="inpost">
+            <label>InPost</label>
         </tab>
         <section id="carriers" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1"
                  showInStore="1">
@@ -195,6 +195,14 @@
                                 <field id="can_close_orders">1</field>
                             </depends>
                             <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                        </field>
+                    </group>
+                    <group id="product" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Product</label>
+                        <field id="inpost_locker_size" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                               showInStore="1">
+                            <label>Default Locker Size</label>
+                            <source_model>InPost\Shipment\Model\Config\Source\Product\LockerSize</source_model>
                         </field>
                     </group>
                 </group>
