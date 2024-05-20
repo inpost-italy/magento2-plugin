@@ -32,6 +32,7 @@ class ConfigProvider
     const XML_PATH_INPOST_AUTOMATIONS_ORDER_TRACKING_STATUS = 'carriers/inpost/automations/order/tracking_status';
     const XML_PATH_INPOST_AUTOMATIONS_ORDER_ORDER_STATUS = 'carriers/inpost/automations/order/order_status';
 
+    const XML_PATH_INPOST_AUTOMATIONS_PRODUCT_LOCKER_SIZE = 'carriers/inpost/automations/product/inpost_locker_size';
 
     const URL_SHIPX_STAGING = 'https://stage-api-shipx-it.easypack24.net';
     const URL_SHIPX_PRODUCTION = 'https://api-shipx-it.easypack24.net';
@@ -182,5 +183,13 @@ class ConfigProvider
     public function getStatusToCloseOrder(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_INPOST_AUTOMATIONS_ORDER_ORDER_STATUS);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDefaultInpostLockerSize(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_AUTOMATIONS_PRODUCT_LOCKER_SIZE);
     }
 }

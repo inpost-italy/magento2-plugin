@@ -197,6 +197,14 @@
                             <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
                         </field>
                     </group>
+                    <group id="product" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Product</label>
+                        <field id="inpost_locker_size" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1"
+                               showInStore="1">
+                            <label>Default Locker Size</label>
+                            <source_model>InPost\Shipment\Model\Config\Source\Product\LockerSize</source_model>
+                        </field>
+                    </group>
                 </group>
 
                 <group id="widget" translate="label"  showInDefault="1" showInWebsite="1" showInStore="1">
