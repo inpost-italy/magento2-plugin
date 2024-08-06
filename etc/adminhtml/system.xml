@@ -80,6 +80,18 @@
                         <label>Mobile Phone Number</label>
                         <comment>Mobile phone number to receive delivery updates.</comment>
                     </field>
+
+                    <field id="free_shipping_enable" translate="label" type="select" sortOrder="330" showInDefault="1" showInWebsite="1">
+                        <label>Enable Free Shipping Threshold</label>
+                        <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                    </field>
+                    <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="331" showInDefault="1" showInWebsite="1">
+                        <label>Free Shipping Amount Threshold</label>
+                        <validate>validate-number validate-zero-or-greater</validate>
+                        <depends>
+                            <field id="free_shipping_enable">1</field>
+                        </depends>
+                    </field>
                 </group>
 
                 <group id="credentials" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">

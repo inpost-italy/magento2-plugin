@@ -12,6 +12,8 @@ class ConfigProvider
     const XML_PATH_INPOST_GENERAL_COMPANY_NAME = 'carriers/inpost/general/company_name';
     const XML_PATH_INPOST_GENERAL_EMAIL = 'carriers/inpost/general/email';
     const XML_PATH_INPOST_GENERAL_MOBILE_PHONE_NUMBER = 'carriers/inpost/general/mobile_phone_number';
+    const XML_PATH_INPOST_GENERAL_FREE_SHIPPING_ENABLE = 'carriers/inpost/general/free_shipping_enable';
+    const XML_PATH_INPOST_GENERAL_FREE_SHIPPING_SUBTOTAL = 'carriers/inpost/general/free_shipping_subtotal';
 
     const XML_PATH_INPOST_FLOW_TYPE = 'carriers/inpost/flow/type';
     const XML_PATH_INPOST_FLOW_STREET = 'carriers/inpost/flow/street';
@@ -113,6 +115,22 @@ class ConfigProvider
     public function getMobilePhoneNumber(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_MOBILE_PHONE_NUMBER);
+    }
+
+    /**
+    * @return bool
+    */
+    public function getFreeShippingEnable(): ?bool
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_FREE_SHIPPING_ENABLE);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFreeShippingSubtotal(): ?string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_INPOST_GENERAL_FREE_SHIPPING_SUBTOTAL);
     }
 
     /**
