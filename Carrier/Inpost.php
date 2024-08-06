@@ -24,6 +24,7 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     const ALLOWED_METHODS = 'inpost';
 
     const CARRIER_TITLE = 'InPost';
+    const CARRIER_TITLE_FREESHIPPING = 'InPost Freeshipping';
 
     const CARRIER_CODE = 'inpost';
 
@@ -147,17 +148,79 @@ class Inpost extends AbstractCarrier implements CarrierInterface
             return $result;
         }
 
-        $method = $this->rateMethodFactory->create();
-        $method->setCarrier(self::CARRIER_CODE);
-        $method->setMethod(self::ALLOWED_METHODS);
 
-        $method->setCarrierTitle(self::CARRIER_TITLE );
-        $method->setMethodTitle('Locker');
-        $method->setPrice($this->getConfigData('general/price'));
-        $method->setCost($this->getConfigData('general/price'));
-        $result->append($method);
+        $this->_updateFreeMethodQuote($request);
+
+        if ($request->getFreeShipping() || $this->isFreeShippingRequired($request)) {
+            /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
+            $method = $this->rateMethodFactory->create();
+
+            $method->setCarrier(self::CARRIER_CODE);
+            $method->setCarrierTitle(self::CARRIER_TITLE_FREESHIPPING );
+
+            $method->setMethod(self::ALLOWED_METHODS);
+            $method->setMethodTitle('Locker');
+
+            $method->setPrice('0.00');
+            $method->setCost('0.00');
+
+            $result->append($method);
+        } else {
+            $method = $this->rateMethodFactory->create();
+            $method->setCarrier(self::CARRIER_CODE);
+            $method->setMethod(self::ALLOWED_METHODS);
+    
+            $method->setCarrierTitle(self::CARRIER_TITLE );
+            $method->setMethodTitle('Locker');
+            $method->setPrice($this->getConfigData('general/price'));
+            $method->setCost($this->getConfigData('general/price'));
+            $result->append($method);
+        }
+
 
         return $result;
+    }
+
+
+    protected function _updateFreeMethodQuote($request)
+    {
+        $freeShipping = false;
+        $items = $request->getAllItems();
+        $c = count($items);
+        for ($i = 0; $i < $c; $i++) {
+            if ($items[$i]->getProduct() instanceof \Magento\Catalog\Model\Product) {
+                if ($items[$i]->getFreeShipping()) {
+                    $freeShipping = true;
+                } else {
+                    return;
+                }
+            }
+        }
+        if ($freeShipping) {
+            $request->setFreeShipping(true);
+        }
+    }
+
+
+        /**
+     * Check subtotal for allowed free shipping
+     *
+     * @param RateRequest $request
+     *
+     * @return bool
+     */
+    private function isFreeShippingRequired(RateRequest $request): bool
+    {
+        if(!$this->getConfigData('general/free_shipping_enable')) {
+            return false;
+        }
+
+        $minSubtotal = $request->getPackageValueWithDiscount();
+        if ($request->getBaseSubtotalWithDiscountInclTax()
+            && $this->getConfigFlag('tax_including')) {
+            $minSubtotal = $request->getBaseSubtotalWithDiscountInclTax();
+        }
+        return $minSubtotal >= $this->getConfigData('general/free_shipping_subtotal');
     }
 
     /**
