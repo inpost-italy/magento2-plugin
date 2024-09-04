@@ -156,7 +156,8 @@ class Inpost extends AbstractCarrier implements CarrierInterface
             $method = $this->rateMethodFactory->create();
 
             $method->setCarrier(self::CARRIER_CODE);
-            $method->setCarrierTitle(self::CARRIER_TITLE_FREESHIPPING );
+            $currierName = $this->getConfigData('general/free_shipping_name_courier');
+            $method->setCarrierTitle($currierName);
 
             $method->setMethod(self::ALLOWED_METHODS);
             $method->setMethodTitle('Locker');
