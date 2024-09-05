@@ -98,7 +98,7 @@
                             <field id="active">1</field>
                         </depends>
                         <validate>required-entry</validate>
-                        <label>Courier Name</label>
+                        <label>Shipping method name</label>
                     </field>
                 </group>
 
