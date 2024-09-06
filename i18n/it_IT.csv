@@ -1,4 +1,4 @@
-"Inpost locker S","Inpost locker S"
+""Inpost locker S","Inpost locker S"
 "Inpost locker M","Inpost locker M"
 "Inpost locker L","Inpost locker L"
 "Sorry, but we can\'t deliver to the destination country with this shipping module.","Ci dispiace, ma non Ë possibile spedire in questo paese con InPost."
@@ -101,3 +101,6 @@ Remove,Rimuovi
 "The parcel is going to the Recipient's town.","Il pacco sarà diretto alla città del destinatario."
 "On the road.","Sulla strada."
 "Your parcel is on its way to the next intermediate hub.","Il tuo pacco è in viaggio verso il prossimo hub intermedio."
+"Courier Name","Nome Corriere"
+"Shipping method name","Nome metodo di spedizione"
+"Pick-up Points","Punti di Ritiro"

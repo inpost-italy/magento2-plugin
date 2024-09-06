@@ -156,10 +156,14 @@ class Inpost extends AbstractCarrier implements CarrierInterface
             $method = $this->rateMethodFactory->create();
 
             $method->setCarrier(self::CARRIER_CODE);
-            $method->setCarrierTitle(self::CARRIER_TITLE_FREESHIPPING );
+            $currierName = $this->getConfigData('general/free_shipping_name_courier');
+            if(empty($currierName)) {
+                $currierName = __('Pick-up Points');
+            }
+            $method->setCarrierTitle($currierName);
 
             $method->setMethod(self::ALLOWED_METHODS);
-            $method->setMethodTitle('Locker');
+            $method->setMethodTitle(self::CARRIER_TITLE);
 
             $method->setPrice('0.00');
             $method->setCost('0.00');
@@ -171,7 +175,7 @@ class Inpost extends AbstractCarrier implements CarrierInterface
             $method->setMethod(self::ALLOWED_METHODS);
     
             $method->setCarrierTitle(self::CARRIER_TITLE );
-            $method->setMethodTitle('Locker');
+            $method->setMethodTitle(self::CARRIER_TITLE);
             $method->setPrice($this->getConfigData('general/price'));
             $method->setCost($this->getConfigData('general/price'));
             $result->append($method);

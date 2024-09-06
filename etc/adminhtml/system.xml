@@ -92,6 +92,14 @@
                             <field id="free_shipping_enable">1</field>
                         </depends>
                     </field>
+                     <field id="free_shipping_name_courier" translate="label" type="text" sortOrder="333" showInDefault="1"
+                           showInWebsite="1" showInStore="1">
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
+                        <validate>required-entry</validate>
+                        <label>Shipping method name</label>
+                    </field>
                 </group>
 
                 <group id="credentials" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
