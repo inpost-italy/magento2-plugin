@@ -42,9 +42,15 @@ class Returns extends AbstractItems
     protected ConfigProvider $config;
 
     /**
+     * @var bool
+     */
+    protected $_isScopePrivate;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param HttpContext $httpContext
+     * @param ConfigProvider $config
      * @param array $data
      */
     public function __construct(

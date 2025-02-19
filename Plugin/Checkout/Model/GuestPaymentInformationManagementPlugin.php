@@ -24,6 +24,11 @@ class GuestPaymentInformationManagementPlugin
     private $shippingAddressChanger;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
      * @param ShippingAddressChanger $shippingAddressChanger

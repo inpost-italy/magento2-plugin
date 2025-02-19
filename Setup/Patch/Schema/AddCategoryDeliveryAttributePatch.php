@@ -2,8 +2,6 @@
 
 namespace InPost\Shipment\Setup\Patch\Schema;
 
-use InPost\Shipment\Config\ConfigProvider;
-use Magento\Catalog\Model\Category;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
@@ -53,7 +51,6 @@ class AddCategoryDeliveryAttributePatch implements SchemaPatchInterface
     public function apply()
     {
         $this->moduleDataSetup->startSetup();
-
         $statuses = [
             [
                 'status' => self::ORDER_STATUS_SHIPPING,
@@ -76,20 +73,6 @@ class AddCategoryDeliveryAttributePatch implements SchemaPatchInterface
                 ]
             );
         }
-
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
-        $eavSetup->addAttribute(Category::ENTITY, ConfigProvider::ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE, [
-            'type'     => 'int',
-            'label'    => 'Eligible for Inpost Delivery',
-            'input'    => 'boolean',
-            'source'   => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
-            'visible'  => true,
-            'default'  => '1',
-            'required' => false,
-            'global'   => ScopedAttributeInterface::SCOPE_STORE,
-            'group'    => 'Display Settings',
-        ]);
-
         $this->moduleDataSetup->endSetup();
     }
 }

@@ -27,6 +27,7 @@ class CreateInpostShipping
     private \Magento\Framework\Message\ManagerInterface $messageManager;
     private Shipment\TrackFactory $trackFactory;
     private Order\ShipmentRepository $shipmentRepository;
+    private $shippingStatusAction;
 
     public function __construct(
         OrderRepository $orderRepository,

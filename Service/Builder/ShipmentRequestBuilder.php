@@ -14,6 +14,11 @@ class ShipmentRequestBuilder
     private $createShipmentRequestFactory;
 
     /**
+     * @var DataObjectFactory
+     */
+    private $objectFactory;
+
+    /**
      * @param CreateShipmentRequestFactory $createShipmentRequest
      * @param DataObjectFactory $objectFactory
      */
@@ -25,11 +30,6 @@ class ShipmentRequestBuilder
         $this->data = $objectFactory->create();
         $this->objectFactory = $objectFactory;
     }
-
-    /**
-     * @var DataObjectFactory
-     */
-    private $objectFactory;
 
     public function setReceiver(array $data): void
     {

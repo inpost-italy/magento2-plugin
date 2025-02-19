@@ -2,6 +2,7 @@
 
 namespace InPost\Shipment\Setup\Patch\Data;
 
+use InPost\Shipment\Config\ConfigProvider;
 use InPost\Shipment\Model\Config\Source\Product\LockerSize;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
@@ -12,6 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Validator\ValidateException;
 use Zend_Validate_Exception;
+use Magento\Catalog\Model\Category;
 
 class AddProductLockerSizeAttribute implements DataPatchInterface
 {
@@ -66,6 +68,20 @@ class AddProductLockerSizeAttribute implements DataPatchInterface
                 'group' => 'General',
             ]
         );
+
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
+        $eavSetup->addAttribute(Category::ENTITY, ConfigProvider::ALLOW_INPOST_DELIVERY_CATEGORY_ATTRIBUTE, [
+            'type'     => 'int',
+            'label'    => 'Eligible for Inpost Delivery',
+            'input'    => 'boolean',
+            'source'   => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
+            'visible'  => true,
+            'default'  => '1',
+            'required' => false,
+            'global'   => ScopedAttributeInterface::SCOPE_STORE,
+            'group'    => 'Display Settings',
+        ]);
+
     }
 
     /**

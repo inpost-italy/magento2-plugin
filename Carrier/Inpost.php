@@ -6,6 +6,7 @@ namespace InPost\Shipment\Carrier;
 use InPost\Shipment\Api\Data\PointsServiceRequestFactory;
 use InPost\Shipment\Config\ConfigProvider;
 use InPost\Shipment\Service\Api\PointsApiService;
+use InPost\Shipment\Service\Quote\PointsExtractor;
 use InPost\Shipment\Validation\ValidationException;
 use InPost\Shipment\Validation\ValidatorPool;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -48,14 +49,20 @@ class Inpost extends AbstractCarrier implements CarrierInterface
     private \InPost\Shipment\Service\Quote\PointsExtractor $pointsExtractor;
 
     /**
+     * @var PointsServiceRequestFactory
+     */
+    private $pointsServiceRequestFactory;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param ErrorFactory $rateErrorFactory
      * @param LoggerInterface $logger
      * @param ResultFactory $rateResultFactory
      * @param MethodFactory $rateMethodFactory
-     * @param PointsApiService $pointsApiService
-     * @param Session $checkoutSession
+     * @param PointsServiceRequestFactory $pointsServiceRequestFactory
+     * @param ValidatorPool $validationPool
      * @param ConfigProvider $configProvider
+     * @param PointsExtractor $pointsExtractor
      * @param array $data
      */
     public function __construct(

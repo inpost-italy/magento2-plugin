@@ -18,6 +18,12 @@ class LockerSize extends AbstractSource implements OptionSourceInterface, Source
     const LOCKER_SIZE_S_LABEL = 'small';
     const LOCKER_SIZE_M_LABEL = 'medium';
     const LOCKER_SIZE_L_LABEL = 'large';
+
+    /**
+     * @var array
+     */
+    protected $_options;
+
     /**
      * @return array
      */
