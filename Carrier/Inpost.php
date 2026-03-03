@@ -212,6 +212,15 @@ class Inpost extends AbstractCarrier implements CarrierInterface
         }
     }
 
+    /**
+     *  Retrieve sort order of InPost carrier
+     *
+     * @return string|null
+     */
+    public function getSortOrder()
+    {
+        return $this->getConfigData('general/sort_order');
+    }
 
         /**
      * Check subtotal for allowed free shipping

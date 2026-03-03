@@ -9,10 +9,10 @@
                 <name>InPost</name>
                 <title>InPost</title>
                 <description>InPost shipping methods</description>
-                <sort_order>0</sort_order>
                 <general>
                     <sallowspecific>1</sallowspecific>
                     <specificcountry>IT</specificcountry>
+                    <sort_order>0</sort_order>
                 </general>
                 <widget>
                     <map_type>osm</map_type>
